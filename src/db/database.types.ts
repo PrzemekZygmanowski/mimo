@@ -110,12 +110,32 @@ export interface Database {
         };
         Relationships: [];
       };
+      user_plants_progress: {
+        Row: {
+          board_state: Json;
+          last_updated_at: string;
+          user_id: string;
+        };
+        Insert: {
+          board_state: Json;
+          last_updated_at?: string;
+          user_id: string;
+        };
+        Update: {
+          board_state?: Json;
+          last_updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
       user_tasks: {
         Row: {
           check_in_id: number | null;
           created_at: string | null;
+          expires_at: string;
           id: number;
           metadata: Json | null;
+          new_task_requests: number;
           status: string;
           task_date: string;
           template_id: number;
@@ -125,8 +145,10 @@ export interface Database {
         Insert: {
           check_in_id?: number | null;
           created_at?: string | null;
+          expires_at: string;
           id?: number;
           metadata?: Json | null;
+          new_task_requests?: number;
           status?: string;
           task_date: string;
           template_id: number;
@@ -136,8 +158,10 @@ export interface Database {
         Update: {
           check_in_id?: number | null;
           created_at?: string | null;
+          expires_at?: string;
           id?: number;
           metadata?: Json | null;
+          new_task_requests?: number;
           status?: string;
           task_date?: string;
           template_id?: number;

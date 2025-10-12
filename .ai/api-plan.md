@@ -1,201 +1,341 @@
 # REST API Plan
 
-This document outlines the design of the REST API for the application. The API is built to support daily check-ins, task assignment, and event logging based on the database schema, product requirements document (PRD), and the specified tech stack.
-
----
-
 ## 1. Resources
 
-- **Users**: Represents the application users. In the database, the `users` table holds unique user data (e.g., unique email for non-anonymous accounts).
-- **Check-Ins**: Captures daily mood and energy check-ins. Mapped to the `check_ins` table with fields such as `user_id`, `mood_level` (smallint, 1–5), `energy_level` (smallint, 1–3), `at` (timestamp), and optional `notes`.
-- **Task Templates**: A catalogue of predefined tasks. Corresponds to the `task_templates` table and may have conditions (e.g., mood/energy thresholds).
-- **User Tasks**: Represents tasks assigned to each user daily. This resource is based on the `user_tasks` table with a unique constraint on `(user_id, task_date)` ensuring one task per day. May reference both `task_templates` and an optional `check_in`.
-- **User Events**: Logs activities such as check-in creation, task assignment, and task status changes (e.g., completed, skipped). Corresponds to the `user_events` table with event metadata in JSONB format.
-
----
+- **Users**: Represents application users. Maps to the `users` table (with unique email constraint and additional fields as needed).
+- **CheckIns**: Records daily check-ins. Maps to the `check_ins` table with fields: `user_id`, `mood_level` (smallint, 1–5 with CHECK), `energy_level` (smallint, 1–3 with CHECK), `at` (timestamp), and optional `notes`.
+- **TaskTemplates**: Repository of micro-task templates. Maps to the `task_templates` table.
+- **UserTasks**: Daily tasks assigned to users. Maps to the `user_tasks` table with fields such as reference to the user, associated task template, `expires_at` (timestamp, 24h validity), and `new_task_requests` (smallint with max 3 per day).
+- **UserEvents**: Logs user activities/events. Maps to the `user_events` table with fields: `id`, `user_id`, `event_type`, `entity_id`, `occurred_at`, and `payload` (jsonb).
+- **PlantsProgress**: Represents the reward system (garden board 5x6). Maps to the `user_plants_progress` table with fields: `user_id`, `board_state` (jsonb), and `last_updated_at`.
 
 ## 2. Endpoints
 
-Endpoints are grouped primarily around CRUD operations for the above resources alongside business-specific actions.
+### Users
 
-### 2.1 Users
-
-- **Register User**
-  - **Method:** POST
-  - **URL:** `/api/users/register`
-  - **Description:** Register a new user via email or opt for anonymous login.
-  - **Request Payload:**
+- **GET /api/users/:id**
+  - Description: Retrieves user details.
+  - Response: JSON with user information, for example:
     ```json
     {
-      "email": "user@example.com", // optional for anonymous
-      "password": "securePassword!",
-      "isAnonymous": false
+      "id": "user-id",
+      "email": "user@example.com",
+      "created_at": "2025-10-12T12:00:00Z",
+      "otherData": {}
     }
     ```
-  - **Response:**
-    ```json
-    { "userId": "uuid", "message": "Registration successful" }
-    ```
-  - **Errors:** Duplicate email, invalid credentials
+  - Success: 200 OK
+  - Errors: 404 Not Found, 401 Unauthorized
 
-- **Login User**
-  - **Method:** POST
-  - **URL:** `/api/users/login`
-  - **Description:** Authenticate an existing user.
-  - **Request Payload:**
-    ```json
-    { "email": "user@example.com", "password": "securePassword!" }
-    ```
-  - **Response:**
+- **POST /api/users**
+  - Description: Registers a new user (supporting both anonymous and email-based registration).
+  - Request JSON:
     ```json
     {
-      "userId": "uuid",
-      "token": "jwt-token",
-      "message": "Login successful"
-    }
-    ```
-  - **Errors:** Invalid credentials
-
-### 2.2 Check-Ins
-
-- **Create Daily Check-In**
-  - **Method:** POST
-  - **URL:** `/api/check-ins`
-  - **Description:** Submit a daily check-in with mood and energy levels. Generates the daily task as part of the response.
-  - **Request Payload:**
-    ```json
-    {
-      "userId": "uuid",
-      "mood_level": 2, // must be between 1 and 5
-      "energy_level": 3, // must be between 1 and 3
-      "notes": "Optional additional notes"
-    }
-    ```
-  - **Response:**
-    ```json
-    {
-      "checkInId": "uuid",
-      "assignedTask": {
-        "taskId": "uuid",
-        "taskDetails": "Do a 10 minute walk",
-        "message": "Based on your energy, we suggest a light activity."
+      "email": "user@example.com", // Optional for anonymous users
+      "password": "securePassword",
+      "otherData": {
+        /* additional fields */
       }
     }
     ```
-  - **Errors:** Validation errors if mood is not in the range of 1–5 or energy is not in the range of 1–3, unauthorized errors
-
-- **Get User Check-Ins**
-  - **Method:** GET
-  - **URL:** `/api/check-ins?userId={userId}&page=1&limit=20`
-  - **Description:** Retrieve paginated check-in records for a user.
-  - **Response:** Array of check-in objects
-  - **Errors:** Unauthorized, not found
-
-### 2.3 Task Templates
-
-- **List Task Templates**
-  - **Method:** GET
-  - **URL:** `/api/task-templates`
-  - **Description:** Retrieve all available task templates.
-  - **Response:** Array of task template objects
-
-- **Get Single Task Template**
-  - **Method:** GET
-  - **URL:** `/api/task-templates/{templateId}`
-  - **Description:** Retrieve details for a specific task template
-  - **Response:** Task template object
-
-### 2.4 User Tasks
-
-- **List User Tasks**
-  - **Method:** GET
-  - **URL:** `/api/user-tasks?userId={userId}&page=1&limit=20`
-  - **Description:** Retrieve paginated tasks assigned to the user.
-  - **Response:** Array of user task objects, including status (pending, completed, skipped)
-
-- **Get User Task**
-  - **Method:** GET
-  - **URL:** `/api/user-tasks/{taskId}`
-  - **Description:** Retrieve details for a specific user task
-  - **Response:** User task object
-
-- **Update User Task (Mark Complete/Skip)**
-  - **Method:** PATCH
-  - **URL:** `/api/user-tasks/{taskId}`
-  - **Description:** Update a user task status (e.g., task done or task skipped)
-  - **Request Payload:**
-    ```json
-    { "status": "completed" } // or "skipped"
-    ```
-  - **Response:** Updated user task object
-  - **Errors:** Constraint violation (e.g., updating a task that doesn't belong to the user)
-
-### 2.5 User Events
-
-- **List User Events**
-  - **Method:** GET
-  - **URL:** `/api/user-events?userId={userId}&page=1&limit=20`
-  - **Description:** Retrieve an audit log of user events like check-in creation, task assignment, and task updates.
-  - **Response:** Array of event objects
-
-- **Log Event (Internal Use)**
-  - **Method:** POST
-  - **URL:** `/api/user-events`
-  - **Description:** Log an event related to a user action. Usually handled internally by the API services.
-  - **Request Payload:**
+  - Response: JSON with user details and authentication token, for example:
     ```json
     {
-      "userId": "uuid",
-      "event_type": "TASK_DONE",
-      "entity_id": "uuid",
-      "payload": { "additional": "info" }
+      "id": "user-id",
+      "email": "user@example.com",
+      "token": "jwt-token"
     }
     ```
-  - **Response:** Confirmation message
+  - Success: 201 Created
+  - Errors: 400 Bad Request
 
----
+### CheckIns
+
+- **POST /api/checkins**
+  - Description: Creates a new check-in for the current user.
+  - Request JSON:
+    ```json
+    {
+      "mood_level": 3, // integer 1-5
+      "energy_level": 2, // integer 1-3
+      "notes": "Feeling okay"
+    }
+    ```
+  - Response: JSON with the check-in record and linked generated task (if applicable), for example:
+    ```json
+    {
+      "id": "checkin-id",
+      "user_id": "user-id",
+      "mood_level": 3,
+      "energy_level": 2,
+      "at": "2025-10-12T12:05:00Z",
+      "notes": "Feeling okay",
+      "generated_task": {
+        "id": "usertask-id",
+        "expires_at": "2025-10-13T12:05:00Z"
+      }
+    }
+    ```
+  - Success: 201 Created
+  - Errors: 400 Bad Request, 401 Unauthorized
+
+- **GET /api/checkins/:id**
+  - Description: Retrieves a specific check-in record.
+  - Response: JSON with check-in details, for example:
+    ```json
+    {
+      "id": "checkin-id",
+      "user_id": "user-id",
+      "mood_level": 3,
+      "energy_level": 2,
+      "at": "2025-10-12T12:05:00Z",
+      "notes": "Feeling okay"
+    }
+    ```
+  - Success: 200 OK
+  - Errors: 404 Not Found, 401 Unauthorized
+
+### TaskTemplates
+
+_(Typically for admin use)_
+
+- **GET /api/task-templates**
+  - Description: Retrieves a list of task templates (can be filtered by mood/energy criteria).
+  - Query Parameters: `mood_level`, `energy_level` (optional filtering)
+  - Response: JSON array of task templates, for example:
+    ```json
+    [
+      {
+        "id": "template-id",
+        "name": "Gentle Walk",
+        "constraints": {
+          "mood_level": [1, 2, 3, 4, 5],
+          "energy_level": [1, 2, 3]
+        }
+      }
+    ]
+    ```
+  - Success: 200 OK
+
+- **GET /api/task-templates/:id**
+  - Description: Retrieves details of a specific task template.
+  - Response: JSON with template details, for example:
+    ```json
+    {
+      "id": "template-id",
+      "name": "Gentle Walk",
+      "description": "A gentle walk to boost mood.",
+      "constraints": { "mood_level": [1, 2, 3, 4, 5], "energy_level": [1, 2, 3] }
+    }
+    ```
+  - Success: 200 OK
+
+- **POST /api/task-templates**
+  - Description: Creates a new task template.
+  - Request JSON: Template details including mood/energy constraints.
+  - Response: JSON with created template details.
+  - Success: 201 Created
+  - Errors: 400 Bad Request
+
+- **PUT/PATCH /api/task-templates/:id**
+  - Description: Updates an existing task template.
+
+- **DELETE /api/task-templates/:id**
+  - Description: Deletes a task template.
+
+### UserTasks
+
+- **GET /api/user-tasks**
+  - Description: Retrieves a list of tasks assigned to the authenticated user.
+  - Query Parameters: Pagination (`page`, `limit`), filtering by status (e.g., pending, completed) and date.
+  - Response: JSON array of user tasks, for example:
+    ```json
+    [
+      {
+        "id": "task-id",
+        "user_id": "user-id",
+        "template_id": "template-id",
+        "expires_at": "2025-10-13T12:05:00Z",
+        "status": "pending",
+        "new_task_requests": 0
+      }
+    ]
+    ```
+  - Success: 200 OK
+
+- **GET /api/user-tasks/:id**
+  - Description: Retrieves details of a specific user task.
+  - Response: JSON with task details, for example:
+    ```json
+    {
+      "id": "task-id",
+      "user_id": "user-id",
+      "template_id": "template-id",
+      "expires_at": "2025-10-13T12:05:00Z",
+      "status": "pending",
+      "new_task_requests": 0
+    }
+    ```
+  - Success: 200 OK
+
+- **POST /api/user-tasks**
+  - Description: Assigns a new task to a user (triggered after check-in or on manual request).
+  - Request JSON:
+    ```json
+    {
+      "template_id": "template-id",
+      "user_id": "user-id",
+      "check_in_id": "checkin-id" // Optional, if generated from a check-in
+    }
+    ```
+  - Response: JSON with task details, for example:
+    ```json
+    {
+      "id": "task-id",
+      "user_id": "user-id",
+      "template_id": "template-id",
+      "expires_at": "2025-10-13T12:05:00Z",
+      "status": "pending",
+      "new_task_requests": 0
+    }
+    ```
+  - Success: 201 Created
+  - Errors: 400 Bad Request, 401 Unauthorized
+
+- **PATCH /api/user-tasks/:id**
+  - Description: Updates a user task (e.g., marking as completed, skipped, or requesting a new task).
+  - Request JSON (example for marking as completed):
+    ```json
+    {
+      "status": "completed"
+    }
+    ```
+  - Response: JSON with updated task details, for example:
+    ```json
+    {
+      "id": "task-id",
+      "status": "completed",
+      "completed_at": "2025-10-12T15:00:00Z"
+    }
+    ```
+  - Success: 200 OK
+  - Errors: 400 Bad Request (if new task request limit exceeded), 401 Unauthorized
+
+### UserEvents
+
+- **POST /api/user-events**
+  - Description: Logs an event for the user (e.g., TASK_DONE, TASK_SKIPPED, CHECKIN_CREATED).
+  - Request JSON:
+    ```json
+    {
+      "event_type": "TASK_DONE",
+      "user_id": "user-id",
+      "entity_id": "entity-id",
+      "payload": { "details": "Task completed successfully." }
+    }
+    ```
+  - Response: JSON with event details, for example:
+    ```json
+    {
+      "id": "event-id",
+      "user_id": "user-id",
+      "event_type": "TASK_DONE",
+      "occurred_at": "2025-10-12T15:05:00Z",
+      "payload": { "details": "Task completed successfully." }
+    }
+    ```
+  - Success: 201 Created
+
+- **GET /api/user-events**
+  - Description: Retrieves a log of events for the authenticated user.
+  - Response: JSON array of events, for example:
+    ```json
+    [
+      {
+        "id": "event-id",
+        "user_id": "user-id",
+        "event_type": "TASK_DONE",
+        "occurred_at": "2025-10-12T15:05:00Z",
+        "payload": { "details": "Task completed successfully." }
+      }
+    ]
+    ```
+  - Success: 200 OK
+
+### PlantsProgress
+
+- **GET /api/plants-progress**
+  - Description: Retrieves the current state of the user's garden board (reward system).
+  - Response: JSON with plants progress details, for example:
+    ```json
+    {
+      "user_id": "user-id",
+      "board_state": {
+        /* 5x6 grid state as JSON */
+      },
+      "last_updated_at": "2025-10-12T16:00:00Z"
+    }
+    ```
+  - Success: 200 OK
+
+- **PATCH /api/plants-progress**
+  - Description: Updates the garden board state. For example, after task completion, the board may be updated.
+  - Request JSON:
+    ```json
+    {
+      "board_state": {
+        /* updated 5x6 grid state as JSON */
+      }
+    }
+    ```
+  - Response: JSON with updated board state, for example:
+    ```json
+    {
+      "user_id": "user-id",
+      "board_state": {
+        /* updated state */
+      },
+      "last_updated_at": "2025-10-12T16:05:00Z"
+    }
+    ```
+  - Success: 200 OK
+  - Errors: 400 Bad Request, 401 Unauthorized
 
 ## 3. Authentication and Authorization
 
-- The API uses JSON Web Tokens (JWT) provided by Supabase for authentication. Endpoints require a valid JWT in the `Authorization` header to access protected resources.
-- Role-Level Security (RLS) policies are enforced at the database level for tables like `users`, `check_ins`, `user_tasks`, and `user_events` to ensure users can only access their own data.
+- **Authentication Mechanism**: JWT-based authentication (leveraging Supabase or custom JWT implementation).
+  - Endpoints require an `Authorization: Bearer <token>` header.
+  - Both anonymous and email-based sessions are supported.
 
----
+- **Authorization**: Implement Role-Level Security (RLS) in the database. On the API layer, ensure that endpoints validate the token and only allow access to resources corresponding to the authenticated user.
 
 ## 4. Validation and Business Logic
 
-- **Validation:**
-  - Mood must be integers between 1 and 5 and energy levels must be integers between 1 and 3, enforced both via API validation and in the database using CHECK constraints.
-  - Unique constraints such as one task per day (`user_id, task_date`) are verified in the API before assignment.
+- **Validation Rules**:
+  - **CheckIns**: Validate `mood_level` is within 1–5 and `energy_level` within 1–3 (as enforced by the DB schema).
+  - **UserTasks**: Enforce one task per day per user via a unique key on `(user_id, task_date)`. When processing new task requests, ensure that `new_task_requests` does not exceed 3 per day.
+  - **Users**: Validate unique email when provided.
 
-- **Business Logic:**
-  - **Daily Check-In & Task Assignment:** When a user creates a check-in, the system evaluates the mood and energy levels to assign an appropriate task from `task_templates`. The response returns the newly created check-in along with the generated task.
-  - **Task Updates:** Users can complete or skip tasks. A completed task triggers a `TASK_DONE` event, while a skipped task triggers a `TASK_SKIPPED` event which are logged into `user_events` for audit and retention analysis.
+- **Business Logic Implementation**:
+  - **Check-In and Task Generation**: After a successful check-in, the system automatically assigns a task based on the user’s mood and energy (select appropriate template matching check-in data) and logs the event.
+  - **Task Request Limit**: When a user requests a new task (via a PATCH to `/api/user-tasks/:id` or a dedicated endpoint), check the current `new_task_requests` count and reject if limit (3 per day) is exceeded.
+  - **Task Expiry**: Each `user_task` has an `expires_at` timestamp (24 hours from assignment). The API should check the expiry against the current time and mark tasks as expired if necessary.
+  - **Logging**: All critical operations (check-ins, task assignments, completions, skips) are logged in `user_events` for audit and analytics purposes.
 
-- **Paging, Filtering, and Sorting:**
-  - List endpoints support pagination via `page` and `limit` query parameters.
-  - Filtering can be extended via additional query parameters (e.g., status for tasks, date ranges for check-ins).
-  - Sorting defaults to recent entries first unless specified.
+- **Pagination, Filtering, and Sorting**:
+  - List endpoints (e.g., GET `/api/user-tasks`, GET `/api/user-events`) will support pagination parameters (`page`, `limit`), and allow filtering by date ranges or status.
 
----
-
-## Assumptions
-
-- Where details were ambiguous, default patterns (such as standard CRUD and HTTP status codes) have been adopted.
-- Supabase is used for both authentication and database operations, ensuring seamless integration between authentication and RLS policies.
+- **Rate Limiting and Security**:
+  - Apply rate limiting to prevent abuse.
+  - Use HTTPS, input sanitization, and proper error handling to ensure security and robustness.
 
 ---
 
-## 5. HTTP Status Codes and Error Handling
+_Assumptions_
 
-- **200 OK:** Successful GET operations.
-- **201 Created:** Successful creation of resources.
-- **400 Bad Request:** Input validation failures.
-- **401 Unauthorized:** Missing or invalid authentication tokens.
-- **403 Forbidden:** Attempting to access resources not owned by the user.
-- **404 Not Found:** Resource not available.
-- **500 Internal Server Error:** Unhandled errors.
+- Some endpoints (especially for task templates) might be restricted to administrative roles.
+- The authentication layer integrates with Supabase JWT tokens and leverages RLS for data protection.
+- The API will be implemented using technologies from the stack (Astro, TypeScript, React for frontend consumption) along with Supabase as the backend database.
 
----
-
-This plan lays a solid foundation for the REST API. Further iterations can include more detailed definitions for each endpoint as the application evolves.
+This REST API plan provides a comprehensive blueprint, mapping the product requirements and database schema directly to well-defined API endpoints with clear validation, business logic, and security measures.

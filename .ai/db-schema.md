@@ -43,6 +43,8 @@ _Uwaga: Dalsze atrybuty profilu mogą być rozszerzane zgodnie z wymaganiami._
 - check_in_id: BIGINT NULL REFERENCES check_ins(id) ON DELETE SET NULL
 - task_date: DATE NOT NULL
 - status: VARCHAR(50) NOT NULL DEFAULT 'pending'
+- expires_at: TIMESTAMP WITH TIME ZONE NOT NULL
+- new_task_requests: SMALLINT NOT NULL DEFAULT 0 CHECK (new_task_requests <= 3)
 - metadata: JSONB NULL
 - created_at: TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 - updated_at: TIMESTAMP WITH TIME ZONE DEFAULT NOW()
@@ -58,9 +60,15 @@ Unikalne ograniczenie: UNIQUE (user_id, task_date)
 - occurred_at: TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
 - payload: JSONB NULL
 
+### 1.6. user_plants_progress
+
+- user_id: UUID PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE
+- board_state: JSONB NOT NULL
+- last_updated_at: TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
+
 ## 2. Relacje między tabelami
 
-- Każdy użytkownik (users) może mieć wiele check_ins, user_tasks oraz user_events.
+- Każdy użytkownik (users) może mieć wiele check_ins, user_tasks, user_events oraz user_plants_progress (jeden rekord przypisany do użytkownika).
 - Tabela user_tasks odwołuje się do task_templates (jeden do wielu) oraz opcjonalnie do check_ins (jeden do wielu).
 
 ## 3. Indeksy
@@ -79,6 +87,7 @@ Wdrożenie RLS (Row Level Security) na tabelach:
 - check_ins
 - user_tasks
 - user_events
+- user_plants_progress
 
 Przykładowa konfiguracja (do wdrożenia w migracjach):
 
@@ -87,6 +96,7 @@ ALTER TABLE users ENABLE ROW LEVEL SECURITY;
 ALTER TABLE check_ins ENABLE ROW LEVEL SECURITY;
 ALTER TABLE user_tasks ENABLE ROW LEVEL SECURITY;
 ALTER TABLE user_events ENABLE ROW LEVEL SECURITY;
+ALTER TABLE user_plants_progress ENABLE ROW LEVEL SECURITY;
 
 -- Przykładowa polityka RLS dla tabeli check_ins:
 CREATE POLICY user_check_ins_policy ON check_ins
