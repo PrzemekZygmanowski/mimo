@@ -101,3 +101,68 @@ Wszelkie błędy powinny być logowane zgodnie z ustalonymi procedurami (np. ded
 6. **Testy:** Przygotowanie testów integracyjnych i jednostkowych, sprawdzających poprawność walidacji, logiki biznesowej oraz obsługi błędów.
 7. **Dokumentacja:** Aktualizacja dokumentacji API, w tym zaktualizowanie specyfikacji w repozytorium oraz przekazanie zespołowi wskazówek dotyczących wdrożenia.
 8. **Wdrożenie:** Wprowadzenie zmian na środowisko testowe, monitorowanie logów oraz stopniowe wdrażanie na produkcję.
+
+# API Endpoint Implementation Plan: GET /api/checkins/:id
+
+## 1. Przegląd punktu końcowego
+Endpoint GET /api/checkins/:id służy do pobierania szczegółów pojedynczego rekordu check-in. Umożliwia autoryzowanym użytkownikom odczyt informacji o swoim check-in, takich jak poziom nastroju, poziom energii, czas wykonania check-in oraz ewentualne notatki.
+
+## 2. Szczegóły żądania
+- **Metoda HTTP:** GET
+- **Struktura URL:** /api/checkins/:id
+- **Parametry:**
+  - **Wymagane:**
+    - `id` – Identyfikator rekordu check-in, reprezentowany jako liczba (BIGSERIAL)
+  - **Opcjonalne:** Brak
+- **Body żądania:** Brak
+
+## 3. Wykorzystywane typy
+- **CheckInDTO:** Definiuje strukturę danych zwracanych przez endpoint (zdefiniowany w `src/types.ts`).
+
+## 4. Szczegóły odpowiedzi
+- **Sukces (200 OK):**
+  - Zwracany JSON zawiera następujące pola:
+    - `id`: numer check-in
+    - `user_id`: identyfikator użytkownika
+    - `mood_level`: ocena nastroju (liczba, 1-5)
+    - `energy_level`: ocena energii (liczba, 1-3)
+    - `at`: znacznik czasu wykonania check-in
+    - `notes`: opcjonalne notatki (tekst)
+- **Błędy:**
+  - 401 Unauthorized – brak odpowiednich uprawnień, nieprawidłowy lub brak tokena autoryzacyjnego
+  - 404 Not Found – nie znaleziono rekordu check-in o podanym identyfikatorze
+  - 500 Internal Server Error – błąd po stronie serwera
+
+## 5. Przepływ danych
+1. Żądanie trafia do endpointu z parametrem `id` w ścieżce.
+2. Middleware weryfikuje autoryzację użytkownika (sprawdzenie tokena oraz zgodności `user_id` z rekordem w bazie).
+3. Endpoint wykorzystuje klienta Supabase (`src/db/supabase.client.ts`) do pobrania rekordu check-in na podstawie `id` oraz weryfikuje przynależność rekordu do użytkownika.
+4. Dane są serializowane przy użyciu typu `CheckInDTO`.
+5. Zwracana jest odpowiedź w formacie JSON.
+
+## 6. Względy bezpieczeństwa
+- **Uwierzytelnianie i autoryzacja:**
+  - Sprawdzenie tokena autoryzacyjnego oraz potwierdzenie, że użytkownik jest właścicielem rekordu.
+  - Stosowanie mechanizmów RLS (Row Level Security) w Supabase.
+- **Walidacja:**
+  - Sprawdzenie formatu parametru `id`.
+
+## 7. Obsługa błędów
+- **401 Unauthorized:** Gdy token jest nieprawidłowy lub nieobecny.
+- **404 Not Found:** Gdy rekord check-in o podanym `id` nie istnieje.
+- **500 Internal Server Error:** W przypadku nieoczekiwanych błędów systemowych.
+
+## 8. Rozważania dotyczące wydajności
+- Wykorzystanie indeksów na kolumnach `id` oraz `user_id` w tabeli `check_ins` dla szybkiego wyszukiwania.
+- Minimalizacja pobieranych danych – zwracanie tylko niezbędnych pól rekordu.
+
+## 9. Etapy wdrożenia
+1. **Inicjalizacja:** Utworzenie pliku endpointu w `/src/pages/api/checkins.ts` dla metody GET.
+2. **Konfiguracja klienta bazy danych:** Import oraz konfiguracja Supabase client z `src/db/supabase.client.ts`.
+3. **Implementacja autoryzacji:** Dodanie middleware do weryfikacji tokena i sprawdzenie zgodności `user_id` rekordu z użytkownikiem.
+4. **Implementacja logiki pobierania danych:** Pobranie rekordu check-in za pomocą parametru `id` i serializacja danych przy użyciu `CheckInDTO`.
+5. **Obsługa błędów:** Implementacja obsługi błędów (401, 404, 500) zgodnie z zasadami implementacji.
+6. **Testy:** Przeprowadzenie testów jednostkowych i integracyjnych endpointu.
+7. **Code review:** Weryfikacja kodu przez zespół programistów.
+8. **Dokumentacja:** Aktualizacja dokumentacji API.
+9. **Wdrożenie:** Przeniesienie endpointu na środowisko testowe, a następnie produkcyjne.
