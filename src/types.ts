@@ -144,3 +144,15 @@ export interface PlantsProgressDTO {
 export interface UpdatePlantsProgressCommand {
   board_state: Json; // Updated board state JSON
 }
+
+// Request DTO for updating plants progress (PATCH /api/plants-progress)
+export interface UpdatePlantsProgressRequestDTO {
+  board_state: Json;
+}
+
+// Response DTO for PATCH /api/plants-progress
+export interface PlantsProgressResponseDTO {
+  user_id: string;
+  board_state: Json;
+  last_updated_at: string;
+}

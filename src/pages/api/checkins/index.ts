@@ -11,68 +11,52 @@ const createCheckInSchema = z.object({
   notes: z.string().optional(),
 });
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, locals }) => {
   try {
-    // Step 1: Uwierzytelnienie użytkownika
-    // const { user } = locals as { user?: { id: string } };
-    // if (!user) {
-    //   return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
-    // }
+    // Step 1: Authenticate user
+    const {
+      data: { user },
+      error: authError,
+    } = await locals.supabase.auth.getUser();
+    if (authError || !user) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
+    }
 
     // Step 2: Walidacja danych wejściowych przy użyciu zod
     const body: unknown = await request.json();
     const parsedBody: CreateCheckInCommand = createCheckInSchema.parse(body);
 
-    // Step 3: Przetwarzanie logiki biznesowej
-    // Tutaj symulujemy wstawienie rekordu check-in. W prawdziwej implementacji należałoby użyć transakcji i operacji na bazie danych
-    // const newCheckIn: CheckInDTO = {
-    //   id: Date.now(), // Przykładowe ID, zastąpić logiką DB
-    //   user_id: user.id,
-    //   mood_level: parsedBody.mood_level,
-    //   energy_level: parsedBody.energy_level,
-    //   at: new Date().toISOString(),
-    //   notes: parsedBody.notes || null,
-    //   generated_task: undefined, // Zadanie generowane opcjonalnie według kryteriów
-    // };
-
-    // Commented out database insertion code
-    /*
-    const { data: checkInInserted, error: checkInError } = await supabaseClient
+    // Step 3: Insert check-in record into database
+    const insertData = {
+      user_id: user.id,
+      mood_level: parsedBody.mood_level,
+      energy_level: parsedBody.energy_level,
+      notes: parsedBody.notes ?? null,
+      at: new Date().toISOString(),
+    };
+    const { data: checkInInserted, error: checkInError } = await locals.supabase
       .from("check_ins")
-      .insert(newCheckIn)
+      .insert(insertData)
+      .select("*")
       .single();
     if (checkInError || !checkInInserted) {
       return new Response(JSON.stringify({ error: "Internal Server Error" }), { status: 500 });
     }
-    const checkIn = checkInInserted as unknown as CheckInDTO;
-    */
 
-    // Return a mocked response as per implementation plan
-    const mockCheckIn: CheckInDTO = {
-      id: 123456, // Mocked ID
-      user_id: "1",
-      mood_level: parsedBody.mood_level,
-      energy_level: parsedBody.energy_level,
-      at: new Date().toISOString(),
-      notes: parsedBody.notes || null,
-      generated_task: {
-        id: 1,
-        check_in_id: null,
-        created_at: new Date().toISOString(),
-        expires_at: "2025-10-13T12:05:00Z",
-        metadata: null,
-        new_task_requests: 0,
-        status: "pending",
-        task_date: new Date().toISOString().split("T")[0],
-        template_id: 0,
-        updated_at: new Date().toISOString(),
-        user_id: "1",
-      },
+    const result: CheckInDTO = {
+      id: checkInInserted.id,
+      user_id: checkInInserted.user_id,
+      mood_level: checkInInserted.mood_level,
+      energy_level: checkInInserted.energy_level,
+      at: checkInInserted.at,
+      notes: checkInInserted.notes,
     };
-
-    return new Response(JSON.stringify(mockCheckIn), { status: 201 });
+    return new Response(JSON.stringify(result), { status: 201 });
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : "Internal Server Error";
     return new Response(JSON.stringify({ error: errorMessage }), { status: 400 });
   }
 };
+
+// Please replace with actual integration tests using supabase test client
+// TODO: add real tests for checking POST /api/checkins writes to database and auth
