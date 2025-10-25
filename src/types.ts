@@ -156,3 +156,12 @@ export interface PlantsProgressResponseDTO {
   board_state: Json;
   last_updated_at: string;
 }
+
+// -----------------------
+// UI Components
+// -----------------------
+
+// Generic props for icon components
+export interface IconProps {
+  className?: string;
+}

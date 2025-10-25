@@ -1,0 +1,13 @@
+---
+import CheckInPage from "../components/CheckInPage";
+import { CheckInProvider } from "../contexts/CheckInContext";
+import Layout from "../layouts/Layout.astro";
+
+export const prerender = false;
+---
+
+<Layout title="Check-In - MIMO">
+  <CheckInProvider client:load>
+    <CheckInPage client:load />
+  </CheckInProvider>
+</Layout>

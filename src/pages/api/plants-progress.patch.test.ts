@@ -15,22 +15,19 @@ let locals: any;
 
 beforeEach(() => {
   mockSupabase = {
-    auth: {
-      getUser: vi.fn(),
-    },
+    auth: { getUser: vi.fn() },
   };
   locals = { supabase: mockSupabase };
-  mockRequest = {
-    json: vi.fn(),
-  };
-  vi.spyOn(service, "updatePlantsProgress");
+  mockRequest = { json: vi.fn() };
+  // Spy and mock the service call in one step
+  vi.spyOn(service, "updatePlantsProgress").mockResolvedValue(mockResponse);
 });
 
 describe("PATCH /api/plants-progress", () => {
   it("returns 200 and updated progress for valid request", async () => {
     mockSupabase.auth.getUser.mockResolvedValue({ data: { user: { id: "user-1" } }, error: null });
     mockRequest.json.mockResolvedValue({ board_state: validBoardState });
-    service.updatePlantsProgress.mockResolvedValue(mockResponse);
+    // (handled by spy in beforeEach)
 
     const response = await PATCH({ request: mockRequest, locals } as any);
     expect(response.status).toBe(200);
@@ -65,7 +62,7 @@ describe("PATCH /api/plants-progress", () => {
     mockRequest.json.mockResolvedValue({ board_state: validBoardState });
     const err: any = new Error("Not Found");
     err.code = "PGRST116";
-    service.updatePlantsProgress.mockRejectedValue(err);
+    (service.updatePlantsProgress as any).mockRejectedValue(err);
 
     const response = await PATCH({ request: mockRequest, locals } as any);
     expect(response.status).toBe(404);
@@ -74,7 +71,7 @@ describe("PATCH /api/plants-progress", () => {
   it("returns 500 on service exception", async () => {
     mockSupabase.auth.getUser.mockResolvedValue({ data: { user: { id: "user-1" } }, error: null });
     mockRequest.json.mockResolvedValue({ board_state: validBoardState });
-    service.updatePlantsProgress.mockRejectedValue(new Error("boom"));
+    (service.updatePlantsProgress as any).mockRejectedValue(new Error("boom"));
 
     const response = await PATCH({ request: mockRequest, locals } as any);
     expect(response.status).toBe(500);
