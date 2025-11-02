@@ -38,8 +38,9 @@
   "typescript.suggest.autoImports": true,
   "javascript.updateImportsOnFileMove.enabled": "always",
   "typescript.updateImportsOnFileMove.enabled": "always",
+
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "never",
+    "source.fixAll.eslint": "always",
     "source.organizeImports": "explicit"
   },
   /////brackets colorizer
@@ -89,6 +90,5 @@
   "sqltools.connections": [],
   "files.autoSave": "afterDelay",
   "editor.stickyScroll.enabled": false,
-  "editor.linkedEditing": true,
-
+  "editor.linkedEditing": true
 }

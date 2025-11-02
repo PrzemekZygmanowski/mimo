@@ -165,3 +165,30 @@ export interface PlantsProgressResponseDTO {
 export interface IconProps {
   className?: string;
 }
+
+// -----------------------
+// Task View Models
+// -----------------------
+
+// View model for Task page, derived from UserTaskDTO with computed properties
+export interface TaskViewModel {
+  id: number;
+  template_id: number;
+  title: string;
+  description: string;
+  expires_at: string;
+  status: "pending" | "completed" | "skipped";
+  new_task_requests: number;
+  expirationTime: Date;
+  remainingRequests: number;
+  isExpired: boolean;
+}
+
+// Action types for task mutations
+export interface UpdateTaskStatus {
+  status: "completed" | "skipped";
+}
+
+export interface RequestNewTask {
+  new_task_requests: number;
+}

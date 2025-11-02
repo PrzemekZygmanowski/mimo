@@ -3,7 +3,6 @@ import { supabaseClient } from "../../db/supabase.client";
 import { GET } from "./task-templates";
 import type { Mock } from "vitest";
 
-
 // Mock supabase client
 vi.mock("../../db/supabase.client", () => ({
   supabaseClient: {
