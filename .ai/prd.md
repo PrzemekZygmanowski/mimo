@@ -48,6 +48,7 @@ Użytkownicy, którzy zmagają się z depresją, wypaleniem czy chronicznym spad
   Tytuł: Wykonanie codziennego check-inu
   Opis: Użytkownik loguje się do aplikacji, przeprowadza check-in nastroju oraz poziomu energii, po czym otrzymuje spersonalizowane zadanie na dany dzień.
   Kryteria akceptacji:
+  - Przeprowadzenie checkinu jest mozliwe tylko dla zalogowanych użytkowników
   - Użytkownik może wprowadzić dane dotyczące nastroju oraz energii.
   - System na podstawie wprowadzonych danych generuje odpowiednie zadanie.
   - Zadanie jest wyświetlane na głównym ekranie wraz z komunikatem zachęcającym do wykonania.
@@ -56,6 +57,7 @@ Użytkownicy, którzy zmagają się z depresją, wypaleniem czy chronicznym spad
   Tytuł: Zadanie dla użytkownika o wysokiej energii
   Opis: Gdy użytkownik zgłasza wysoki poziom energii, system przydziela bardziej aktywizujące zadanie, mające na celu zwiększenie poczucia sprawczości.
   Kryteria akceptacji:
+  - Wykonywanie zadań jest mozliwe tylko dla zalogowanych użytkowników
   - System rozpoznaje scenariusz użytkownika o wysokiej energii na podstawie check-inu.
   - Zadanie jest zaprojektowane tak, aby angażowało użytkownika do wykonania bardziej dynamicznej aktywności.
   - Użytkownik otrzymuje odpowiedni komunikat motywujący do podjęcia zadania.
@@ -64,17 +66,24 @@ Użytkownicy, którzy zmagają się z depresją, wypaleniem czy chronicznym spad
   Tytuł: Postępowanie w przypadku pominięcia zadania
   Opis: Jeśli użytkownik zdecyduje się pominąć przydzielone zadanie, system wyświetla neutralny komunikat, informujący o możliwości wykonania zadania w późniejszym czasie oraz rejestruje taki przypadek.
   Kryteria akceptacji:
+  - Pominięcie zadania jest mozliwe tylko dla zalogowanych użytkowników
   - Użytkownik ma możliwość wybrania opcji pominięcia zadania.
   - System wyświetla komunikat, który jest neutralny, lecz wspierający.
   - Akcja pominięcia zadania jest zapisywana dla celów analizy retencji użytkowników.
 
 - ID: US-004
   Tytuł: Uwierzytelnianie i bezpieczny dostęp
-  Opis: Aplikacja umożliwia użytkownikowi bezpieczne logowanie poprzez anonimowe konto lub rejestrację za pomocą e-mail, gwarantując ochronę danych osobowych.
+  Opis: Aplikacja umożliwia użytkownikowi bezpieczne logowanie poprzez rejestrację za pomocą e-mail, gwarantując ochronę danych osobowych.
   Kryteria akceptacji:
-  - Użytkownik ma możliwość wyboru metody logowania (anonimowo lub przez e-mail).
+  - Logowanie i rejestracja odbywają się na dedykowanych stronach.
+  - Użytkownik ma możliwość wyboru metody logowania (przez e-mail).
   - Dane użytkownika są szyfrowane, a system stosuje odpowiednie procedury bezpieczeństwa.
   - Dostęp do funkcji aplikacji jest zależny od pomyślnego logowania, a historia wykonywanych zadań jest powiązana z kontem użytkownika.
+  - Użytkownik NIE MOŻE korzystać z funkcji Kolekcji bez logowania się do systemu (US-003).
+  - Użytkownik może logować się do systemu poprzez przycisk w prawym górnym rogu.
+  - Użytkownik może się wylogować z systemu poprzez przycisk w prawym górnym rogu w głównym @Layout.astro.
+  - Nie korzystamy z zewnętrznych serwisów logowania (np. Google, GitHub).
+  - Odzyskiwanie hasła powinno być możliwe.
 
 ## 6. Metryki sukcesu
 
