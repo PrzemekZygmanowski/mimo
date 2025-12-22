@@ -49,14 +49,13 @@ export default function ExpirationTimer({ expirationTime, onExpire }: Expiration
   }, [expirationTime, onExpire]);
 
   return (
-    <div className="flex items-center gap-2">
-      <span className="text-sm text-muted-foreground">Pozostały czas:</span>
+    <div className='flex items-center gap-2'>
+      <span className='text-sm text-muted-foreground'>Pozostały czas:</span>
       <time
         dateTime={expirationTime.toISOString()}
         className={`text-sm font-semibold ${isExpired ? "text-destructive" : "text-foreground"}`}
-        aria-live="polite"
-        aria-atomic="true"
-      >
+        aria-live='polite'
+        aria-atomic='true'>
         {timeRemaining}
       </time>
     </div>

@@ -15,7 +15,7 @@ export const registerSchema = z
     password: passwordSchema,
     confirmPassword: z.string(),
   })
-  .refine((data) => data.password === data.confirmPassword, {
+  .refine(data => data.password === data.confirmPassword, {
     message: "Hasła muszą być identyczne",
     path: ["confirmPassword"],
   });
@@ -29,7 +29,7 @@ export const resetPasswordSchema = z
     password: passwordSchema,
     confirmPassword: z.string(),
   })
-  .refine((data) => data.password === data.confirmPassword, {
+  .refine(data => data.password === data.confirmPassword, {
     message: "Hasła muszą być identyczne",
     path: ["confirmPassword"],
   });

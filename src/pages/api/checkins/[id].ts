@@ -8,7 +8,7 @@ const paramsSchema = z.object({
   id: z
     .string()
     .regex(/^\d+$/)
-    .transform((val) => parseInt(val, 10)),
+    .transform(val => parseInt(val, 10)),
 });
 
 export const GET: APIRoute = async ({ params, locals }) => {

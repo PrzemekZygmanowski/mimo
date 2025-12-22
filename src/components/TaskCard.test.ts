@@ -143,6 +143,3 @@ describe("TaskCard - Logic Tests", () => {
     });
   });
 });
-
-
-

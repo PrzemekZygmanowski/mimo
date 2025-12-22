@@ -43,14 +43,13 @@ export default function TaskActions({
 
   return (
     <>
-      <div className="flex flex-col sm:flex-row gap-3">
+      <div className='flex flex-col sm:flex-row gap-3'>
         {/* Execute Button */}
         <Button
           onClick={onExecute}
           disabled={isExpired || isAnyActionInProgress}
-          className="flex-1"
-          aria-label="Wykonaj zadanie"
-        >
+          className='flex-1'
+          aria-label='Wykonaj zadanie'>
           {isExecuting ? "Wykonywanie..." : "Wykonaj zadanie"}
         </Button>
 
@@ -58,10 +57,9 @@ export default function TaskActions({
         <Button
           onClick={onSkip}
           disabled={isExpired || isAnyActionInProgress}
-          variant="outline"
-          className="flex-1"
-          aria-label="Pomiń zadanie"
-        >
+          variant='outline'
+          className='flex-1'
+          aria-label='Pomiń zadanie'>
           {isSkipping ? "Pomijanie..." : "Pomiń"}
         </Button>
 
@@ -69,19 +67,18 @@ export default function TaskActions({
         <Button
           onClick={onRequestNew}
           disabled={!canRequestNew || isExpired || isAnyActionInProgress}
-          variant="secondary"
-          className="flex-1"
+          variant='secondary'
+          className='flex-1'
           aria-label={
             canRequestNew ? `Pobierz nowe zadanie (${remainingRequests} pozostałych)` : "Osiągnięto limit nowych zadań"
           }
-          title={!canRequestNew ? "Osiągnięto dzienny limit 3 nowych zadań" : undefined}
-        >
+          title={!canRequestNew ? "Osiągnięto dzienny limit 3 nowych zadań" : undefined}>
           {isRequestingNew ? "Pobieranie..." : "Nowe zadanie"}
         </Button>
       </div>
 
       {/* Skip Confirmation Modal */}
-      <AlertDialog open={showSkipConfirmation} onOpenChange={(open) => !open && onSkipCancel()}>
+      <AlertDialog open={showSkipConfirmation} onOpenChange={open => !open && onSkipCancel()}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Pominąć zadanie?</AlertDialogTitle>
@@ -94,8 +91,7 @@ export default function TaskActions({
             <AlertDialogCancel onClick={onSkipCancel}>Nie, wróć</AlertDialogCancel>
             <AlertDialogAction
               onClick={onSkipConfirm}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-            >
+              className='bg-destructive text-destructive-foreground hover:bg-destructive/90'>
               Tak, pomiń
             </AlertDialogAction>
           </AlertDialogFooter>
@@ -104,7 +100,7 @@ export default function TaskActions({
 
       {/* Limit Reached Information Modal */}
       {!canRequestNew && (
-        <div className="text-center text-sm text-muted-foreground mt-2">Osiągnąłeś dzienny limit 3 nowych zadań</div>
+        <div className='text-center text-sm text-muted-foreground mt-2'>Osiągnąłeś dzienny limit 3 nowych zadań</div>
       )}
     </>
   );

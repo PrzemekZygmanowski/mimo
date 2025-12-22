@@ -379,6 +379,7 @@ sequenceDiagram
 ## Kluczowe elementy architektury
 
 ### 1. Middleware Astro (src/middleware/index.ts)
+
 - **Rola**: Strażnik autentykacji dla każdego żądania HTTP
 - **Odpowiedzialności**:
   - Odczyt tokenów z ciasteczek HTTP-only
@@ -389,37 +390,46 @@ sequenceDiagram
   - Ustawienie `context.locals.user` i `context.locals.supabase`
 
 ### 2. Tokeny i sesje
+
 - **Access Token (JWT)**: Ważny 1 godzinę, używany do weryfikacji tożsamości
 - **Refresh Token**: Ważny 7 dni, używany do odnawiania access token
 - **Przechowywanie**: Ciasteczka HTTP-only (bezpieczne, niedostępne z JS)
 - **Autorefresh**: Supabase client automatycznie odnawia tokeny
 
 ### 3. Row Level Security (RLS)
+
 - **Polityki**: `WHERE user_id = auth.uid()`
 - **Automatyczna**: JWT zawiera `user_id`, używany w RLS
 - **Izolacja danych**: Każdy użytkownik widzi tylko swoje dane
 - **Egzekwowana na poziomie bazy**: Nie można ominąć
 
 ### 4. Ochrona tras
+
 **Strony Astro (SSR)**:
+
 ```typescript
 const user = Astro.locals.user;
 if (!user) return Astro.redirect("/login");
 ```
 
 **API Endpoints**:
+
 ```typescript
-const { data: { user } } = await locals.supabase.auth.getUser();
+const {
+  data: { user },
+} = await locals.supabase.auth.getUser();
 if (!user) return new Response("Unauthorized", { status: 401 });
 ```
 
 ### 5. Przepływ danych po zalogowaniu
+
 1. Użytkownik zalogowany → tokeny w ciasteczkach
 2. Każde żądanie → middleware weryfikuje i odświeża tokeny
 3. `Astro.locals.user` dostępne w stronach i API
 4. Komponenty React przekierowują do `/login` przy 401
 
 ### 6. Bezpieczeństwo
+
 - **HTTPS**: Wymuszony dla produkcji
 - **HTTP-only cookies**: Tokeny niedostępne z JavaScript (XSS protection)
 - **Secure flag**: Ciasteczka tylko przez HTTPS
@@ -428,8 +438,8 @@ if (!user) return new Response("Unauthorized", { status: 401 });
 - **RLS**: Izolacja danych na poziomie bazy
 
 ### 7. Obsługa błędów
+
 - **401 Unauthorized**: Przekierowanie do `/login`
 - **Token wygasły**: Automatyczne odświeżenie lub logout
 - **Błędy sieci**: Komunikaty user-friendly po polsku
 - **Walidacja**: Client-side (UX) + Server-side (security)
-

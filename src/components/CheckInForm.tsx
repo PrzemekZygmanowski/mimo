@@ -44,12 +44,12 @@ export function CheckInForm({ onSubmit }: CheckInFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmitForm)} className="space-y-6 max-w-md w-full">
+    <form onSubmit={handleSubmit(onSubmitForm)} className='space-y-6 max-w-md w-full'>
       {/* Mood selector */}
-      <div className="space-y-2">
+      <div className='space-y-2'>
         <Label>Jak się dzisiaj czujesz?</Label>
         <Controller
-          name="mood_level"
+          name='mood_level'
           control={control}
           render={({ field }) => (
             <MoodSelector selected={field.value} onChange={field.onChange} error={errors.mood_level?.message} />
@@ -58,10 +58,10 @@ export function CheckInForm({ onSubmit }: CheckInFormProps) {
       </div>
 
       {/* Energy selector */}
-      <div className="space-y-2">
+      <div className='space-y-2'>
         <Label>Jaki jest Twój poziom energii?</Label>
         <Controller
-          name="energy_level"
+          name='energy_level'
           control={control}
           render={({ field }) => (
             <EnergySelector selected={field.value} onChange={field.onChange} error={errors.energy_level?.message} />
@@ -70,21 +70,21 @@ export function CheckInForm({ onSubmit }: CheckInFormProps) {
       </div>
 
       {/* Notes textarea */}
-      <div className="space-y-2">
-        <Label htmlFor="notes">Notatki (opcjonalnie)</Label>
+      <div className='space-y-2'>
+        <Label htmlFor='notes'>Notatki (opcjonalnie)</Label>
         <textarea
-          id="notes"
+          id='notes'
           {...register("notes")}
-          className="mt-1 block w-full border border-input rounded-md px-3 py-2 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring resize-none"
+          className='mt-1 block w-full border border-input rounded-md px-3 py-2 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring resize-none'
           rows={4}
-          placeholder="Dodaj swoje notatki..."
+          placeholder='Dodaj swoje notatki...'
         />
-        {errors.notes && <p className="text-sm text-destructive">{errors.notes.message}</p>}
+        {errors.notes && <p className='text-sm text-destructive'>{errors.notes.message}</p>}
       </div>
 
       {/* Submit button */}
-      <div className="pt-2">
-        <Button type="submit" disabled={isSubmitting} className="w-full">
+      <div className='pt-2'>
+        <Button type='submit' disabled={isSubmitting} className='w-full'>
           {isSubmitting ? "Wysyłanie..." : "Wyślij"}
         </Button>
       </div>

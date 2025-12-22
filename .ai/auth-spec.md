@@ -57,7 +57,7 @@ if (user) {
 }
 ---
 
-<Layout title="Logowanie - MIMO">
+<Layout title='Logowanie - MIMO'>
   <LoginForm client:load />
 </Layout>
 ```
@@ -90,7 +90,7 @@ if (user) {
 }
 ---
 
-<Layout title="Rejestracja - MIMO">
+<Layout title='Rejestracja - MIMO'>
   <RegisterForm client:load />
 </Layout>
 ```
@@ -118,7 +118,7 @@ Strona umożliwiająca użytkownikom zainicjowanie procesu resetowania hasła.
 export const prerender = false;
 ---
 
-<Layout title="Przypomnij hasło - MIMO">
+<Layout title='Przypomnij hasło - MIMO'>
   <ForgotPasswordForm client:load />
 </Layout>
 ```
@@ -153,7 +153,7 @@ if (!code) {
 }
 ---
 
-<Layout title="Resetuj hasło - MIMO">
+<Layout title='Resetuj hasło - MIMO'>
   <ResetPasswordForm client:load code={code} />
 </Layout>
 ```
@@ -245,7 +245,7 @@ if (!user) {
 // (np. czy upłynęło 24h od ostatniego zadania lub zadanie zostało wykonane)
 ---
 
-<Layout title="Check-In - MIMO">
+<Layout title='Check-In - MIMO'>
   <CheckInProvider client:load>
     <CheckInPage client:load />
   </CheckInProvider>
@@ -290,7 +290,7 @@ if (!activeTask || activeTask.status !== "pending") {
 }
 ---
 
-<Layout title="Twoje zadanie - MIMO">
+<Layout title='Twoje zadanie - MIMO'>
   <TaskProvider client:load>
     <TaskPage client:load />
   </TaskProvider>
@@ -562,28 +562,28 @@ const user = Astro.locals.user;
 ---
 
 <!doctype html>
-<html lang="pl">
+<html lang='pl'>
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/png" href="/favicon.png" />
-    <meta name="generator" content={Astro.generator} />
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width' />
+    <link rel='icon' type='image/png' href='/favicon.png' />
+    <meta name='generator' content={Astro.generator} />
     <title>{title}</title>
   </head>
   <body>
-    <nav class="top-nav">
+    <nav class='top-nav'>
       {
         user ? (
-          <div class="user-actions">
-            <span class="user-email">{user.email}</span>
-            <form method="POST" action="/api/auth/logout">
-              <button type="submit" class="btn-logout">
+          <div class='user-actions'>
+            <span class='user-email'>{user.email}</span>
+            <form method='POST' action='/api/auth/logout'>
+              <button type='submit' class='btn-logout'>
                 Wyloguj się
               </button>
             </form>
           </div>
         ) : (
-          <a href="/login" class="btn-login">
+          <a href='/login' class='btn-login'>
             Zaloguj się
           </a>
         )
@@ -989,7 +989,7 @@ export const registerSchema = z
     password: passwordSchema,
     confirmPassword: z.string(),
   })
-  .refine((data) => data.password === data.confirmPassword, {
+  .refine(data => data.password === data.confirmPassword, {
     message: "Hasła muszą być identyczne",
     path: ["confirmPassword"],
   });
@@ -1003,7 +1003,7 @@ export const resetPasswordSchema = z
     password: passwordSchema,
     confirmPassword: z.string(),
   })
-  .refine((data) => data.password === data.confirmPassword, {
+  .refine(data => data.password === data.confirmPassword, {
     message: "Hasła muszą być identyczne",
     path: ["confirmPassword"],
   });

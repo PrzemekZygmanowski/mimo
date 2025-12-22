@@ -17,8 +17,8 @@ export default function MessageBanner({ message, type = "neutral" }: MessageBann
   };
 
   return (
-    <div className={`p-4 rounded-md border ${getStyles()}`} role="status" aria-live="polite">
-      <p className="text-sm">{message}</p>
+    <div className={`p-4 rounded-md border ${getStyles()}`} role='status' aria-live='polite'>
+      <p className='text-sm'>{message}</p>
     </div>
   );
 }

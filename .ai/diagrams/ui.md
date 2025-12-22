@@ -338,18 +338,21 @@ sequenceDiagram
 ### Warstwa prezentacji (Strony Astro)
 
 Strony Astro działają w trybie SSR i są odpowiedzialne za:
+
 - Server-side sprawdzenie autentykacji (`locals.user`)
 - Przekierowania w zależności od stanu użytkownika
 - Renderowanie komponentów React z dyrektywą `client:load`
 - Przekazywanie danych z serwera do komponentów klienckich
 
 **Nowe strony:**
+
 - `login.astro` - strona logowania
 - `register.astro` - strona rejestracji
 - `forgot-password.astro` - przypomnienie hasła
 - `reset-password.astro` - resetowanie hasła
 
 **Zmodyfikowane strony:**
+
 - `index.astro` - dodano sprawdzenie auth i logikę przekierowań
 - `checkin.astro` - dodano sprawdzenie auth
 - `task.astro` - dodano sprawdzenie auth
@@ -359,12 +362,14 @@ Strony Astro działają w trybie SSR i są odpowiedzialne za:
 Komponenty React są używane tylko dla interaktywnych elementów UI:
 
 **Nowe komponenty autentykacji:**
+
 - `LoginForm.tsx` - formularz logowania z walidacją
 - `RegisterForm.tsx` - formularz rejestracji
 - `ForgotPasswordForm.tsx` - formularz przypomnienia hasła
 - `ResetPasswordForm.tsx` - formularz resetowania hasła
 
 **Istniejące komponenty funkcjonalności:**
+
 - `CheckInPage.tsx` - główny kontener strony check-in
 - `CheckInForm.tsx` - formularz check-in z walidacją
 - `MoodSelector.tsx` - selektor nastroju (1-5)
@@ -378,15 +383,18 @@ Komponenty React są używane tylko dla interaktywnych elementów UI:
 ### Warstwa kontekstów (Zarządzanie stanem)
 
 **Istniejące konteksty:**
+
 - `CheckInContext.tsx` - zarządzanie stanem check-in, fetchowanie aktywnego zadania
 - `TaskContext.tsx` - zarządzanie stanem zadań, akcje na zadaniach
 
 **Opcjonalny nowy kontekst:**
+
 - `AuthContext.tsx` - zarządzanie stanem autentykacji po stronie klienta (opcjonalnie, większość autentykacji jest server-side)
 
 ### Warstwa layoutu
 
 **Zmodyfikowany layout:**
+
 - `Layout.astro` - **WYMAGANA MODYFIKACJA**: dodanie przycisków logowania/wylogowania w prawym górnym rogu
   - Jeśli `locals.user` istnieje: wyświetl email + przycisk "Wyloguj się"
   - Jeśli brak `locals.user`: wyświetl przycisk "Zaloguj się"
@@ -394,6 +402,7 @@ Komponenty React są używane tylko dla interaktywnych elementów UI:
 ### Warstwa middleware
 
 **Zmodyfikowany middleware:**
+
 - `middleware/index.ts` - rozszerzenie o:
   - Zarządzanie ciasteczkami sesji (HTTP-only)
   - Synchronizację sesji między klientem a serwerem
@@ -403,6 +412,7 @@ Komponenty React są używane tylko dla interaktywnych elementów UI:
 ### Warstwa API
 
 **Istniejące endpointy:**
+
 - `POST /api/checkins` - tworzenie check-inu
 - `GET /api/checkins/[id]` - pobieranie check-inu
 - `GET /api/user-tasks` - lista zadań
@@ -411,6 +421,7 @@ Komponenty React są używane tylko dla interaktywnych elementów UI:
 - `GET /api/plants-progress` - postępy użytkownika
 
 **Opcjonalne nowe endpointy:**
+
 - `POST /api/auth/register` - wrapper dla rejestracji
 - `POST /api/auth/login` - wrapper dla logowania
 - `POST /api/auth/logout` - wylogowanie
@@ -418,6 +429,7 @@ Komponenty React są używane tylko dla interaktywnych elementów UI:
 ### Warstwa UI komponentów (Shadcn/ui)
 
 Współdzielone komponenty UI używane przez wszystkie komponenty React:
+
 - `Button` - przyciski
 - `Card` - karty
 - `Label` - etykiety
@@ -470,11 +482,13 @@ Użytkownik → TaskPage → TaskContext → GET /api/user-tasks →
 ## Podsumowanie zmian wprowadzonych przez moduł autentykacji
 
 ### Nowe elementy
+
 1. 4 nowe strony Astro (login, register, forgot-password, reset-password)
 2. 4 nowe komponenty React (formularze autentykacji)
 3. Opcjonalnie: AuthContext i wrapper API endpoints
 
 ### Zmodyfikowane elementy
+
 1. `Layout.astro` - przyciski logowania/wylogowania (WYMAGANE)
 2. `index.astro` - logika przekierowań
 3. `checkin.astro` - sprawdzenie autentykacji
@@ -482,6 +496,7 @@ Użytkownik → TaskPage → TaskContext → GET /api/user-tasks →
 5. `middleware/index.ts` - rozszerzenie o zarządzanie sesją
 
 ### Niezmienione elementy
+
 Wszystkie istniejące funkcjonalności (check-in, zadania, konteksty, komponenty UI)
 pozostają bez zmian i są chronione przez moduł autentykacji.
 
@@ -490,4 +505,3 @@ pozostają bez zmian i są chronione przez moduł autentykacji.
 **Data utworzenia:** 2025-12-19
 **Wersja:** 1.0
 **Status:** Specyfikacja przed implementacją
-

@@ -78,4 +78,3 @@ Struktura oparta na dwuwarstwowym layoutcie z dedykowanymi routami dla każdej s
 - React Context dla sesji i SWR hooks dla fetchowania danych
 
 ---
-

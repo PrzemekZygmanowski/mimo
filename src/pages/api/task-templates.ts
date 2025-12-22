@@ -12,11 +12,11 @@ export const prerender = false;
  */
 const querySchema = z.object({
   mood_level: z.preprocess(
-    (val) => (val !== undefined ? parseInt(String(val), 10) : undefined),
+    val => (val !== undefined ? parseInt(String(val), 10) : undefined),
     z.number().min(1).max(5).optional()
   ),
   energy_level: z.preprocess(
-    (val) => (val !== undefined ? parseInt(String(val), 10) : undefined),
+    val => (val !== undefined ? parseInt(String(val), 10) : undefined),
     z.number().min(1).max(3).optional()
   ),
 });
@@ -54,7 +54,7 @@ export const GET: APIRoute = async ({ request }) => {
       logError("Database error in GET /api/task-templates", error);
       return new Response(JSON.stringify({ error: error.message }), { status: 500 });
     }
-    const result = (templates as TaskTemplateDTO[]).map((t) => ({
+    const result = (templates as TaskTemplateDTO[]).map(t => ({
       id: t.id,
       name: t.title,
       constraints: {

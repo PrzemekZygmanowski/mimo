@@ -11,12 +11,12 @@ const paramsSchema = z.object({
   id: z
     .string()
     .regex(/^\d+$/)
-    .transform((val) => parseInt(val, 10)),
+    .transform(val => parseInt(val, 10)),
 });
 
 // Schema for validating request body
 const bodySchema = z.object({
-  status: z.string().refine((val) => ["pending", "completed", "skipped"].includes(val), {
+  status: z.string().refine(val => ["pending", "completed", "skipped"].includes(val), {
     message: "Invalid status value",
   }),
   new_task_requests: z.number().int().min(0).max(3).optional(),

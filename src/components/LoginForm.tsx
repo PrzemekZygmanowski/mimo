@@ -25,100 +25,95 @@ export function LoginForm() {
     setError(null);
     try {
       // TODO: Implementacja logiki logowania
-      console.log("Login attempt:", data);
       // Placeholder - będzie zaimplementowane w kolejnym etapie
-    } catch (err) {
+      await Promise.resolve(data);
+    } catch {
       setError("Wystąpił błąd podczas logowania. Spróbuj ponownie.");
     }
   };
 
   return (
-    <div className="w-full max-w-md mx-auto">
-      <div className="bg-card rounded-xl shadow-lg border border-border p-8">
-        <div className="mb-6 text-center">
-          <h1 className="text-2xl font-bold text-foreground mb-2">Logowanie</h1>
-          <p className="text-sm text-muted-foreground">Zaloguj się do swojego konta</p>
+    <div className='w-full max-w-md mx-auto'>
+      <div className='bg-card rounded-xl shadow-lg border border-border p-8'>
+        <div className='mb-6 text-center'>
+          <h1 className='text-2xl font-bold text-foreground mb-2'>Logowanie</h1>
+          <p className='text-sm text-muted-foreground'>Zaloguj się do swojego konta</p>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
           {/* Global error message */}
           {error && (
             <div
-              className="p-3 rounded-md bg-destructive/10 border border-destructive/20 text-destructive text-sm animate-in fade-in slide-in-from-top-1 duration-200"
-              role="alert"
-            >
+              className='p-3 rounded-md bg-destructive/10 border border-destructive/20 text-destructive text-sm animate-in fade-in slide-in-from-top-1 duration-200'
+              role='alert'>
               {error}
             </div>
           )}
 
           {/* Email field */}
-          <div className="space-y-2">
-            <Label htmlFor="email">Adres e-mail</Label>
+          <div className='space-y-2'>
+            <Label htmlFor='email'>Adres e-mail</Label>
             <Input
-              id="email"
-              type="email"
-              placeholder="twoj@email.com"
-              autoComplete="email"
+              id='email'
+              type='email'
+              placeholder='twoj@email.com'
+              autoComplete='email'
               aria-invalid={!!errors.email}
               aria-describedby={errors.email ? "email-error" : undefined}
               {...register("email")}
             />
             {errors.email && (
               <p
-                id="email-error"
-                className="text-sm text-destructive animate-in fade-in slide-in-from-top-1 duration-200"
-              >
+                id='email-error'
+                className='text-sm text-destructive animate-in fade-in slide-in-from-top-1 duration-200'>
                 {errors.email.message}
               </p>
             )}
           </div>
 
           {/* Password field */}
-          <div className="space-y-2">
-            <Label htmlFor="password">Hasło</Label>
+          <div className='space-y-2'>
+            <Label htmlFor='password'>Hasło</Label>
             <Input
-              id="password"
-              type="password"
-              placeholder="••••••••"
-              autoComplete="current-password"
+              id='password'
+              type='password'
+              placeholder='••••••••'
+              autoComplete='current-password'
               aria-invalid={!!errors.password}
               aria-describedby={errors.password ? "password-error" : undefined}
               {...register("password")}
             />
             {errors.password && (
               <p
-                id="password-error"
-                className="text-sm text-destructive animate-in fade-in slide-in-from-top-1 duration-200"
-              >
+                id='password-error'
+                className='text-sm text-destructive animate-in fade-in slide-in-from-top-1 duration-200'>
                 {errors.password.message}
               </p>
             )}
           </div>
 
           {/* Forgot password link */}
-          <div className="flex justify-end">
+          <div className='flex justify-end'>
             <a
-              href="/forgot-password"
-              className="text-sm text-primary hover:underline focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 rounded"
-            >
+              href='/forgot-password'
+              className='text-sm text-primary hover:underline focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 rounded'>
               Zapomniałeś hasła?
             </a>
           </div>
 
           {/* Submit button */}
-          <Button type="submit" disabled={isSubmitting} className="w-full">
+          <Button type='submit' disabled={isSubmitting} className='w-full'>
             {isSubmitting ? "Logowanie..." : "Zaloguj się"}
           </Button>
         </form>
 
         {/* Register link */}
-        <div className="mt-6 text-center">
-          <p className="text-sm text-muted-foreground">
+        <div className='mt-6 text-center'>
+          <p className='text-sm text-muted-foreground'>
             Nie masz konta?{" "}
             <a
-              href="/register"
-              className="text-primary font-medium hover:underline focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 rounded"
-            >
+              href='/register'
+              className='text-primary font-medium hover:underline focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 rounded'>
               Zarejestruj się
             </a>
           </p>

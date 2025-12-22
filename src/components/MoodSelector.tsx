@@ -26,22 +26,21 @@ interface MoodSelectorProps {
 
 export function MoodSelector({ selected, onChange, error }: MoodSelectorProps) {
   return (
-    <div className="space-y-3">
+    <div className='space-y-3'>
       <div
-        role="radiogroup"
-        aria-label="Wybierz poziom nastroju"
+        role='radiogroup'
+        aria-label='Wybierz poziom nastroju'
         aria-describedby={error ? "mood-error" : undefined}
-        className="grid grid-cols-3 sm:grid-cols-5 gap-2 sm:gap-3"
-      >
-        {moodOptions.map((option) => {
+        className='grid grid-cols-3 sm:grid-cols-5 gap-2 sm:gap-3'>
+        {moodOptions.map(option => {
           const Icon = option.icon;
           const isSelected = selected === option.value;
 
           return (
             <button
               key={option.value}
-              type="button"
-              role="radio"
+              type='button'
+              role='radio'
               aria-checked={isSelected}
               aria-label={`${option.value} - ${option.label}`}
               onClick={() => onChange(option.value)}
@@ -57,8 +56,7 @@ export function MoodSelector({ selected, onChange, error }: MoodSelectorProps) {
                     ? "border-primary bg-accent text-primary shadow-sm scale-105"
                     : "border-input bg-background text-muted-foreground hover:border-primary/50 hover:bg-accent/50"
                 }
-              `}
-            >
+              `}>
               <Icon
                 className={`
                   w-10 h-10 sm:w-12 sm:h-12 mb-1.5 sm:mb-2
@@ -66,13 +64,13 @@ export function MoodSelector({ selected, onChange, error }: MoodSelectorProps) {
                   ${isSelected ? "scale-110" : "group-hover:scale-110"}
                 `}
               />
-              <span className="text-[10px] sm:text-xs font-medium text-center leading-tight">{option.label}</span>
+              <span className='text-[10px] sm:text-xs font-medium text-center leading-tight'>{option.label}</span>
             </button>
           );
         })}
       </div>
       {error && (
-        <p id="mood-error" className="text-sm text-destructive animate-in fade-in slide-in-from-top-1 duration-200">
+        <p id='mood-error' className='text-sm text-destructive animate-in fade-in slide-in-from-top-1 duration-200'>
           {error}
         </p>
       )}

@@ -100,6 +100,3 @@ describe("MessageBanner - Logic Tests", () => {
     });
   });
 });
-
-
-

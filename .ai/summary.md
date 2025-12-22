@@ -1,5 +1,6 @@
 <conversation_summary>
 <decisions>
+
 1. Główny problem produktu został zdefiniowany jako brak poczucia kontroli u osób zmagających się z depresją, wypaleniem i chronicznym spadkiem motywacji.
 2. MVP musi zawierać funkcjonalność check-in nastroju i energii, jedno zadanie dziennie dopasowane do stanu użytkownika, empatyczne komunikaty po wykonaniu zadania oraz wizualizację postępów w formie ogródka.
 3. W rozmowie przyjęto trzy scenariusze użytkownika: dzień z niską energią, dzień z większą motywacją oraz dzień, w którym użytkownik nie wykonuje zadania, co skutkuje neutralnym feedbackiem.
@@ -10,9 +11,10 @@
 8. Integracja komponentów React z Astro została zaplanowana z uwzględnieniem lazy loadingu i optymalizacji wydajności.
 9. Harmonogram 6-tygodniowy projektu został szczegółowo podzielony na etapy, od fazy discovery i UX po testy oraz beta release.
 10. Plan testowania obejmuje testy manualne, jednostkowe, integracyjne oraz testy dostępności zgodnie z wymogami WCAG.
-</decisions>
+    </decisions>
 
 <matched_recommendations>
+
 1. Uzupełnienie segmentacji emocjonalnej użytkowników w celu dokładniejszego dopasowania komunikatów wsparcia.
 2. Definicja precyzyjnych kryteriów doboru mikrozadań na podstawie poziomu energii i nastroju.
 3. Rozbudowanie funkcjonalności feedbacku, umożliwiającej użytkownikowi pomijanie lub modyfikowanie proponowanych zadań.
@@ -23,9 +25,10 @@
 8. Udoskonalenie planu testowania, uwzględniając scenariusze rzeczywistego użytkowania oraz testy dostępności.
 9. Zaplanowanie buforów czasowych oraz iteracyjnych etapów w harmonogramie projektu.
 10. Opracowanie szczegółowych przypadków testowych dla wszystkich kluczowych funkcjonalności.
-</matched_recommendations>
+    </matched_recommendations>
 
 <prd_planning_summary>
+
 - **Główne wymagania funkcjonalne produktu:**
   - Check-in nastroju i energii umożliwiający dopasowanie zadania do stanu użytkownika.
   - Jedno dopasowane zadanie dziennie, z naciskiem na prostotę i brak presji.
@@ -46,11 +49,12 @@
   - Konieczność dalszej segmentacji emocjonalnej użytkowników oraz potwierdzenie algorytmów personalizacji z ekspertami zdrowia psychicznego.
   - Szczegółowy plan integracji komponentów React z Astro, w tym zarządzanie stanem między warstwami.
   - Ustalenie kompleksowych scenariuszy testowych, które odzwierciedlają rzeczywiste warunki użytkowania.
-</prd_planning_summary>
+    </prd_planning_summary>
 
 <unresolved_issues>
+
 - Potrzeba dalszej weryfikacji specyfiki segmentacji emocjonalnej oraz personalizacji zadaniowej zgodnie z konsultacjami z ekspertami zdrowia psychicznego.
 - Szczegółowe ustalenie metod integracji pomiędzy komponentami React i backendem w kontekście optymalizacji wydajności.
 - Dokładne doprecyzowanie przypadków testowych uwzględniających interakcje użytkownika i dostępność aplikacji.
-</unresolved_issues>
-</conversation_summary>
+  </unresolved_issues>
+  </conversation_summary>

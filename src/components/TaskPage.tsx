@@ -16,17 +16,17 @@ export default function TaskPage() {
   const renderContent = () => {
     const states = {
       loading: (
-        <Card className="w-full max-w-2xl">
-          <CardContent className="pt-6">
-            <p className="text-center text-muted-foreground">Ładowanie zadania...</p>
+        <Card className='w-full max-w-2xl'>
+          <CardContent className='pt-6'>
+            <p className='text-center text-muted-foreground'>Ładowanie zadania...</p>
           </CardContent>
         </Card>
       ),
 
       error: (
-        <Card className="w-full max-w-2xl">
+        <Card className='w-full max-w-2xl'>
           <CardHeader>
-            <CardTitle className="text-destructive">Błąd</CardTitle>
+            <CardTitle className='text-destructive'>Błąd</CardTitle>
             <CardDescription>{error}</CardDescription>
           </CardHeader>
           <CardContent>
@@ -36,18 +36,18 @@ export default function TaskPage() {
       ),
 
       noTask: (
-        <Card className="w-full max-w-2xl">
+        <Card className='w-full max-w-2xl'>
           <CardHeader>
             <CardTitle>Brak aktywnego zadania</CardTitle>
             <CardDescription>Nie masz obecnie przypisanego żadnego zadania na dziś.</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <p className="text-sm text-muted-foreground">
+          <CardContent className='space-y-4'>
+            <p className='text-sm text-muted-foreground'>
               Wykonaj check-in, aby otrzymać spersonalizowane zadanie dopasowane do Twojego nastroju i energii.
             </p>
-            <div className="flex gap-2">
+            <div className='flex gap-2'>
               <Button onClick={() => (window.location.href = "/checkin")}>Wykonaj Check-In</Button>
-              <Button onClick={() => (window.location.href = "/")} variant="outline">
+              <Button onClick={() => (window.location.href = "/")} variant='outline'>
                 Wróć do strony głównej
               </Button>
             </div>
@@ -56,23 +56,23 @@ export default function TaskPage() {
       ),
 
       taskExpired: task && (
-        <Card className="w-full max-w-2xl">
+        <Card className='w-full max-w-2xl'>
           <CardHeader>
             <CardTitle>Zadanie wygasło</CardTitle>
             <CardDescription>To zadanie już wygasło.</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="p-4 bg-muted rounded-md">
-              <h3 className="font-semibold mb-1">{task.title}</h3>
-              <p className="text-sm text-muted-foreground">{task.description}</p>
-              <p className="text-xs text-muted-foreground mt-2">
+          <CardContent className='space-y-4'>
+            <div className='p-4 bg-muted rounded-md'>
+              <h3 className='font-semibold mb-1'>{task.title}</h3>
+              <p className='text-sm text-muted-foreground'>{task.description}</p>
+              <p className='text-xs text-muted-foreground mt-2'>
                 Wygasło: {task.expirationTime.toLocaleString("pl-PL")}
               </p>
             </div>
-            <p className="text-sm text-muted-foreground">Wykonaj nowy check-in, aby otrzymać kolejne zadanie.</p>
-            <div className="flex gap-2">
+            <p className='text-sm text-muted-foreground'>Wykonaj nowy check-in, aby otrzymać kolejne zadanie.</p>
+            <div className='flex gap-2'>
               <Button onClick={() => (window.location.href = "/checkin")}>Wykonaj Check-In</Button>
-              <Button onClick={() => (window.location.href = "/")} variant="outline">
+              <Button onClick={() => (window.location.href = "/")} variant='outline'>
                 Wróć do strony głównej
               </Button>
             </div>
@@ -81,18 +81,18 @@ export default function TaskPage() {
       ),
 
       taskCompleted: task && (
-        <Card className="w-full max-w-2xl">
+        <Card className='w-full max-w-2xl'>
           <CardHeader>
-            <CardTitle className="text-green-600">Zadanie ukończone! 🎉</CardTitle>
+            <CardTitle className='text-green-600'>Zadanie ukończone! 🎉</CardTitle>
             <CardDescription>Gratulacje! Wykonałeś dzisiejsze zadanie.</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="p-4 bg-green-50 dark:bg-green-950 rounded-md border border-green-200 dark:border-green-800">
-              <h3 className="font-semibold mb-1">{task.title}</h3>
-              <p className="text-sm text-muted-foreground">{task.description}</p>
+          <CardContent className='space-y-4'>
+            <div className='p-4 bg-green-50 dark:bg-green-950 rounded-md border border-green-200 dark:border-green-800'>
+              <h3 className='font-semibold mb-1'>{task.title}</h3>
+              <p className='text-sm text-muted-foreground'>{task.description}</p>
             </div>
-            <p className="text-sm text-muted-foreground">Wróć jutro, aby otrzymać kolejne zadanie!</p>
-            <Button onClick={() => (window.location.href = "/")} variant="outline">
+            <p className='text-sm text-muted-foreground'>Wróć jutro, aby otrzymać kolejne zadanie!</p>
+            <Button onClick={() => (window.location.href = "/")} variant='outline'>
               Wróć do strony głównej
             </Button>
           </CardContent>
@@ -100,20 +100,20 @@ export default function TaskPage() {
       ),
 
       taskSkipped: task && (
-        <Card className="w-full max-w-2xl">
+        <Card className='w-full max-w-2xl'>
           <CardHeader>
             <CardTitle>Zadanie pominięte</CardTitle>
             <CardDescription>To zadanie zostało pominięte.</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="p-4 bg-muted rounded-md">
-              <h3 className="font-semibold mb-1">{task.title}</h3>
-              <p className="text-sm text-muted-foreground">{task.description}</p>
+          <CardContent className='space-y-4'>
+            <div className='p-4 bg-muted rounded-md'>
+              <h3 className='font-semibold mb-1'>{task.title}</h3>
+              <p className='text-sm text-muted-foreground'>{task.description}</p>
             </div>
-            <p className="text-sm text-muted-foreground">Wykonaj nowy check-in, aby otrzymać inne zadanie.</p>
-            <div className="flex gap-2">
+            <p className='text-sm text-muted-foreground'>Wykonaj nowy check-in, aby otrzymać inne zadanie.</p>
+            <div className='flex gap-2'>
               <Button onClick={() => (window.location.href = "/checkin")}>Wykonaj Check-In</Button>
-              <Button onClick={() => (window.location.href = "/")} variant="outline">
+              <Button onClick={() => (window.location.href = "/")} variant='outline'>
                 Wróć do strony głównej
               </Button>
             </div>
@@ -122,9 +122,9 @@ export default function TaskPage() {
       ),
 
       activeTask: task && (
-        <div className="w-full max-w-2xl">
+        <div className='w-full max-w-2xl'>
           {actionError && (
-            <div className="mb-4 p-3 bg-destructive/10 text-destructive rounded-md text-sm" role="alert">
+            <div className='mb-4 p-3 bg-destructive/10 text-destructive rounded-md text-sm' role='alert'>
               {actionError}
             </div>
           )}
@@ -146,5 +146,5 @@ export default function TaskPage() {
     return states.activeTask;
   };
 
-  return <div className="flex items-center justify-center min-h-screen p-4">{renderContent()}</div>;
+  return <div className='flex items-center justify-center min-h-screen p-4'>{renderContent()}</div>;
 }

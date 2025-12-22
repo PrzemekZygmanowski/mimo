@@ -1,9 +1,11 @@
 # API Endpoint Implementation Plan: GET /api/user-tasks/:id
 
 ## 1. Przegląd punktu końcowego
+
 Endpoint umożliwia pobranie szczegółów zadania użytkownika na podstawie jego identyfikatora. Jego głównym celem jest zwrócenie danych zadania, w tym informacji o użytkowniku, szablonie zadania, statusie, terminie wygaśnięcia i liczbie nowych żądań zadania.
 
 ## 2. Szczegóły żądania
+
 - **Metoda HTTP:** GET
 - **Struktura URL:** /api/user-tasks/:id
 - **Parametry:**
@@ -13,6 +15,7 @@ Endpoint umożliwia pobranie szczegółów zadania użytkownika na podstawie jeg
 - **Request Body:** Brak
 
 ## 3. Wykorzystywane typy
+
 - **UserTaskDTO:**
   ```typescript
   export interface UserTaskDTO {
@@ -31,6 +34,7 @@ Endpoint umożliwia pobranie szczegółów zadania użytkownika na podstawie jeg
   ```
 
 ## 4. Szczegóły odpowiedzi
+
 - **Status 200 OK:** Zwrot szczegółów zadania w formacie JSON, przykładowa struktura:
   ```json
   {
@@ -49,6 +53,7 @@ Endpoint umożliwia pobranie szczegółów zadania użytkownika na podstawie jeg
   - **500 Internal Server Error:** W przypadku błędów po stronie serwera.
 
 ## 5. Przepływ danych
+
 1. Odebranie żądania GET z parametrem `id`.
 2. Walidacja parametru `id` (czy jest poprawnym numerem).
 3. Uwierzytelnienie użytkownika (sprawdzenie kontekstu Supabase lub innego mechanizmu autoryzacji).
@@ -56,22 +61,26 @@ Endpoint umożliwia pobranie szczegółów zadania użytkownika na podstawie jeg
 5. Jeżeli zadanie zostanie znalezione, zwrócenie danych w formacie JSON; w przeciwnym razie zwrócenie błędu 404.
 
 ## 6. Względy bezpieczeństwa
+
 - **Uwierzytelnienie:** Sprawdzenie, czy użytkownik jest zalogowany i ma uprawnienia do przeglądania zadania.
 - **Autoryzacja:** Upewnienie się, że pobierane zadanie należy do uwierzytelnionego użytkownika (porównanie `user_id`).
 - **Walidacja danych:** Sprawdzenie poprawności formatu `id` oraz sanityzacja danych wejściowych.
 
 ## 7. Obsługa błędów
+
 - **400 Bad Request:** Kiedy parametr `id` nie jest poprawnym numerem.
 - **401 Unauthorized:** W przypadku braku prawidłowej autoryzacji użytkownika.
 - **404 Not Found:** Gdy zadanie o podanym `id` nie istnieje lub nie należy do aktualnego użytkownika.
 - **500 Internal Server Error:** Obsługa nieprzewidzianych błędów, zapisywanie szczegółowych logów błędów dla dalszej analizy.
 
 ## 8. Rozważania dotyczące wydajności
+
 - Użycie indeksów w tabeli `user_tasks` (głównie po kolumnie `id`) zapewnia szybkie wyszukiwanie.
 - Optymalizacja zapytań SQL oraz wykorzystywanie warstwy cache, jeśli to konieczne.
 - Monitorowanie przeciążeń bazy danych w przypadku dużej liczby żądań.
 
 ## 9. Etapy wdrożenia
+
 1. **Stworzenie handlera endpointu:** Utworzenie pliku w `src/pages/api/user-tasks/[id].ts` lub odpowiedniego dla Astro endpointu.
 2. **Walidacja parametrów:** Implementacja walidacji parametru `id` jako liczby.
 3. **Uwierzytelnienie użytkownika:** Integracja z mechanizmem autoryzacji (np. Supabase) w celu weryfikacji tożsamości użytkownika.

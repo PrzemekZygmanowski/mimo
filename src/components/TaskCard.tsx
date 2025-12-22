@@ -88,20 +88,20 @@ export default function TaskCard({ task, onError }: TaskCardProps) {
   const motivationalMessage = getMotivationalMessage();
 
   return (
-    <Card className="w-full">
+    <Card className='w-full'>
       <CardHeader>
-        <div className="flex items-start justify-between gap-4">
-          <div className="flex-1">
-            <CardTitle className="text-2xl mb-2">{task.title}</CardTitle>
+        <div className='flex items-start justify-between gap-4'>
+          <div className='flex-1'>
+            <CardTitle className='text-2xl mb-2'>{task.title}</CardTitle>
             <CardDescription>{task.description}</CardDescription>
           </div>
         </div>
-        <div className="mt-4">
+        <div className='mt-4'>
           <ExpirationTimer expirationTime={task.expirationTime} />
         </div>
       </CardHeader>
 
-      <CardContent className="space-y-4">
+      <CardContent className='space-y-4'>
         <MessageBanner message={motivationalMessage.message} type={motivationalMessage.type} />
 
         <TaskActions
@@ -120,7 +120,7 @@ export default function TaskCard({ task, onError }: TaskCardProps) {
         />
 
         {task.remainingRequests > 0 && (
-          <div className="text-xs text-muted-foreground text-center">
+          <div className='text-xs text-muted-foreground text-center'>
             Pozostałe żądania nowych zadań: {task.remainingRequests}/3
           </div>
         )}

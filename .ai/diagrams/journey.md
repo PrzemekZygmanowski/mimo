@@ -155,6 +155,7 @@ stateDiagram-v2
 **Cel:** Utworzenie konta i pierwsze użycie aplikacji
 
 **Kroki:**
+
 1. Użytkownik wchodzi na stronę główną
 2. System sprawdza autentykację → brak sesji
 3. Przekierowanie do strony logowania
@@ -176,6 +177,7 @@ stateDiagram-v2
 19. Wizualizacja osiągnięć
 
 **Punkty decyzyjne:**
+
 - Walidacja danych rejestracji (email unikalny, hasło silne)
 - Potwierdzenie emaila (konto nieaktywne do czasu potwierdzenia)
 - Walidacja danych logowania
@@ -185,6 +187,7 @@ stateDiagram-v2
 **Cel:** Kontynuacja korzystania z aplikacji
 
 **Kroki:**
+
 1. Użytkownik wchodzi na stronę główną
 2. System sprawdza autentykację → sesja ważna
 3. System sprawdza stan zadania
@@ -202,6 +205,7 @@ stateDiagram-v2
    - Dalsza ścieżka jak w Scenariuszu A
 
 **Punkty decyzyjne:**
+
 - Czy użytkownik ma aktywne zadanie z dzisiaj?
 - Czy użytkownik osiągnął dzienny limit zadań? (max 3)
 - Czy użytkownik przekroczył limit próśb o nowe zadanie? (max 3)
@@ -211,6 +215,7 @@ stateDiagram-v2
 **Cel:** Ponowne uwierzytelnienie
 
 **Kroki:**
+
 1. Użytkownik wchodzi na stronę główną
 2. System sprawdza autentykację → sesja wygasła
 3. Przekierowanie do strony logowania
@@ -224,6 +229,7 @@ stateDiagram-v2
 **Cel:** Odzyskanie dostępu do konta
 
 **Kroki:**
+
 1. Użytkownik klika "Zapomniałeś hasła?" na stronie logowania
 2. Przekierowanie do formularza przypomnienia hasła
 3. Użytkownik wprowadza adres email
@@ -241,6 +247,7 @@ stateDiagram-v2
    - Powrót do formularza przypomnienia hasła
 
 **Punkty decyzyjne:**
+
 - Czy token resetowania jest ważny?
 - Czy nowe hasło spełnia wymagania bezpieczeństwa?
 
@@ -249,6 +256,7 @@ stateDiagram-v2
 **Cel:** Realizacja przydzielonego zadania
 
 **Kroki:**
+
 1. Użytkownik widzi przydzielone zadanie
 2. Ma do wyboru 3 akcje:
 
@@ -278,6 +286,7 @@ stateDiagram-v2
      - Brak możliwości generowania nowego
 
 **Punkty decyzyjne:**
+
 - Którą akcję wybiera użytkownik?
 - Czy użytkownik przekroczył limit próśb o nowe zadanie?
 - Czy użytkownik osiągnął dzienny limit wykonanych zadań?
@@ -287,6 +296,7 @@ stateDiagram-v2
 **Cel:** Zakończenie sesji użytkownika
 
 **Kroki:**
+
 1. Użytkownik klika przycisk "Wyloguj się" w prawym górnym rogu
 2. System wywołuje `signOut()` w Supabase
 3. Usunięcie sesji i tokenów
@@ -296,12 +306,14 @@ stateDiagram-v2
 ## Kluczowe zasady biznesowe
 
 ### Zasady autentykacji
+
 1. **Wymagane logowanie:** Użytkownik NIE MOŻE korzystać z funkcji aplikacji bez zalogowania
 2. **Tylko email/hasło:** Brak opcji logowania przez Google, GitHub czy innych dostawców OAuth
 3. **Weryfikacja emaila:** Użytkownik musi potwierdzić email przed pierwszym logowaniem
 4. **Bezpieczeństwo:** Hasło musi mieć minimum 8 znaków
 
 ### Zasady check-in i zadań
+
 1. **Jedno zadanie dziennie:** Zadanie pozostaje aktywne przez 24 godziny
 2. **Nowy check-in możliwy gdy:**
    - Zadanie zostało wykonane
@@ -311,6 +323,7 @@ stateDiagram-v2
 4. **Limit wykonanych zadań:** Maksymalnie 3 zadania dziennie
 
 ### Zasady postępu
+
 1. **Ogródek 5x6:** Plansza składa się z 30 pól
 2. **Sadzenie drzew:** Za każde wykonane zadanie użytkownik sadzi jedno drzewo
 3. **Historia zadań:** System zapobiega ponownemu przydzieleniu ostatnio wykonanych/pominiętych zadań
@@ -331,16 +344,19 @@ Diagram uwzględnia różne stany emocjonalne użytkownika w zależności od pun
 ## Komunikaty systemowe
 
 ### Komunikaty sukcesu
+
 - **Po rejestracji:** "Konto zostało utworzone! Wysłaliśmy link aktywacyjny na adres {email}. Kliknij w link, aby aktywować konto."
 - **Po wykonaniu zadania:** "Wspaniale! Wykonałeś zadanie. Twój ogródek rośnie!" (z ikoną emocji dopasowaną do nastroju)
 - **Po aktualizacji postępu:** Wizualizacja ogródka z nowo zasadzonym drzewem
 
 ### Komunikaty neutralne
+
 - **Po pominięciu:** "W porządku. Możesz wrócić do zadania później lub wykonać nowy check-in."
 - **Limit nowych zadań:** "Osiągnąłeś dzienny limit próśb o nowe zadanie. Spróbuj wykonać obecne zadanie lub wróć jutro."
 - **Limit wykonanych zadań:** "Świetna robota! Wykonałeś dzisiaj 3 zadania. Wróć jutro po nowe wyzwania."
 
 ### Komunikaty błędów
+
 - **Błąd logowania:** "Nieprawidłowy email lub hasło. Spróbuj ponownie."
 - **Email już istnieje:** "Konto z tym adresem email już istnieje. Czy chcesz się zalogować?"
 - **Słabe hasło:** "Hasło jest zbyt słabe. Użyj minimum 8 znaków, w tym liter i cyfr."
@@ -366,4 +382,3 @@ Dla optymalizacji doświadczenia użytkownika, zaleca się śledzenie:
    - Średnia liczba zadań wykonanych przez użytkownika
    - Wzrost liczby drzew w ogródku
    - Długość serii (streak) wykonywania zadań
-
