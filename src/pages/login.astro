@@ -1,0 +1,16 @@
+---
+import { LoginForm } from "../components/LoginForm";
+import Layout from "../layouts/Layout.astro";
+
+// Nie implementujemy jeszcze logiki sprawdzania sesji - to przyjdzie w kolejnym etapie
+export const prerender = false;
+---
+
+<Layout title='Logowanie - MIMO'>
+  <main
+    class='min-h-screen bg-gradient-to-br from-primary/5 via-background to-secondary/10 flex items-center justify-center p-4'>
+    <div class='w-full'>
+      <LoginForm client:load />
+    </div>
+  </main>
+</Layout>

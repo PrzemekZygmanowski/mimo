@@ -1,0 +1,16 @@
+---
+import { RegisterForm } from "../components/RegisterForm";
+import Layout from "../layouts/Layout.astro";
+
+// Nie implementujemy jeszcze logiki sprawdzania sesji - to przyjdzie w kolejnym etapie
+export const prerender = false;
+---
+
+<Layout title='Rejestracja - MIMO'>
+  <main
+    class='min-h-screen bg-gradient-to-br from-primary/5 via-background to-secondary/10 flex items-center justify-center p-4'>
+    <div class='w-full'>
+      <RegisterForm client:load />
+    </div>
+  </main>
+</Layout>
