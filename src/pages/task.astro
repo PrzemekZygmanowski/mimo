@@ -1,6 +1,5 @@
 ---
-import TaskPage from "../components/TaskPage";
-import { TaskProvider } from "../contexts/TaskContext";
+import TaskPageWrapper from "../components/TaskPageWrapper";
 import Layout from "../layouts/Layout.astro";
 
 export const prerender = false;
@@ -29,7 +28,5 @@ if (!activeTask || activeTask.status !== "pending") {
 ---
 
 <Layout title='Twoje zadanie - MIMO'>
-  <TaskProvider client:load>
-    <TaskPage client:load />
-  </TaskProvider>
+  <TaskPageWrapper client:load />
 </Layout>
