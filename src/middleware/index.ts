@@ -1,8 +1,14 @@
 import { defineMiddleware } from "astro:middleware";
-import { supabaseClient } from "../db/supabase.client";
+import { createSupabaseServerInstance } from "../db/supabase.client";
 
 // Public paths that don't require authentication
-const PUBLIC_PATHS = ["/login", "/register", "/forgot-password", "/reset-password"];
+const PUBLIC_PATHS = [
+  "/login",
+  "/register",
+  "/forgot-password",
+  "/reset-password",
+  "/api/auth/", // Auth API endpoints
+];
 
 // Helper function to check if the current path is public
 const isPublicPath = (pathname: string): boolean => {
@@ -12,14 +18,19 @@ const isPublicPath = (pathname: string): boolean => {
 export const onRequest = defineMiddleware(async (context, next) => {
   const { pathname } = context.url;
 
-  // Initialize Supabase client in locals
-  context.locals.supabase = supabaseClient;
+  // Initialize Supabase server instance with cookie management
+  const supabase = createSupabaseServerInstance({
+    headers: context.request.headers,
+    cookies: context.cookies,
+  });
 
-  // Try to fetch the authenticated user
+  context.locals.supabase = supabase;
+
+  // IMPORTANT: Always get user session first before any other operations
   try {
     const {
       data: { user },
-    } = await context.locals.supabase.auth.getUser();
+    } = await supabase.auth.getUser();
     context.locals.user = user;
   } catch {
     // If there's an error fetching the user (e.g., no session), set user to null

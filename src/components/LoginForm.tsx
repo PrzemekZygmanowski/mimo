@@ -23,12 +23,27 @@ export function LoginForm() {
 
   const onSubmit = async (data: LoginFormData) => {
     setError(null);
+
     try {
-      // TODO: Implementacja logiki logowania
-      // Placeholder - będzie zaimplementowane w kolejnym etapie
-      await Promise.resolve(data);
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        setError(result.error || "Wystąpił błąd podczas logowania. Spróbuj ponownie.");
+        return;
+      }
+
+      // Success - full page reload to sync session with server
+      window.location.replace("/");
     } catch {
-      setError("Wystąpił błąd podczas logowania. Spróbuj ponownie.");
+      setError("Nie można połączyć się z serwerem. Spróbuj ponownie.");
     }
   };
 

@@ -1,8 +1,38 @@
 ---
-import Welcome from "../components/Welcome.astro";
 import Layout from "../layouts/Layout.astro";
+
+export const prerender = false;
+
+const user = Astro.locals.user;
+
+// If user is not logged in, redirect to login
+if (!user) {
+  return Astro.redirect("/login");
+}
+
+// User is logged in - check if they have an active task
+const supabase = Astro.locals.supabase;
+
+// Get today's date in YYYY-MM-DD format
+const today = new Date().toISOString().split("T")[0];
+
+// Check for active task today
+const { data: activeTask } = await supabase
+  .from("user_tasks")
+  .select("*")
+  .eq("user_id", user.id)
+  .eq("task_date", today)
+  .single();
+
+// If user has a pending task, redirect to task page
+if (activeTask && activeTask.status === "pending") {
+  return Astro.redirect("/task");
+}
+
+// No active task - redirect to check-in
+return Astro.redirect("/checkin");
 ---
 
-<Layout>
-  <Welcome />
+<Layout title='MIMO'>
+  <!-- This page always redirects, content should never render -->
 </Layout>

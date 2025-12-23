@@ -1,0 +1,53 @@
+---
+import type { User } from "@supabase/supabase-js";
+
+interface Props {
+  user?: User | null;
+}
+
+const { user } = Astro.props;
+---
+
+<nav class='fixed top-0 right-0 left-0 z-50 bg-background/80 backdrop-blur-sm border-b border-border'>
+  <div class='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+    <div class='flex justify-between items-center h-16'>
+      <!-- Logo/Brand -->
+      <div class='flex-shrink-0'>
+        <a
+          href='/'
+          class='text-xl font-bold text-foreground hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 rounded'
+          aria-label='Strona główna'>
+          MIMO
+        </a>
+      </div>
+
+      <!-- Auth buttons -->
+      <div class='flex items-center gap-4'>
+        {
+          user ? (
+            <div class='flex items-center gap-3'>
+              <span class='text-sm text-muted-foreground hidden sm:inline' aria-label='Zalogowany jako'>
+                {user.email}
+              </span>
+              <form action='/api/auth/logout' method='POST'>
+                <button
+                  type='submit'
+                  class='px-4 py-2 text-sm font-medium text-destructive hover:text-destructive/90 hover:bg-destructive/10 rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2'
+                  aria-label='Wyloguj się'>
+                  Wyloguj się
+                </button>
+              </form>
+            </div>
+          ) : (
+            <a
+              href='/login'
+              class='px-4 py-2 text-sm font-medium text-primary-foreground bg-primary hover:bg-primary/90 rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2'
+              aria-label='Przejdź do logowania'>
+              Zaloguj się
+            </a>
+          )
+        }
+      </div>
+    </div>
+  </div>
+</nav>

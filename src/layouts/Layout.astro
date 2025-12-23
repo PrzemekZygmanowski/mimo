@@ -1,15 +1,17 @@
 ---
+import Navigation from "../components/Navigation.astro";
 import "../styles/global.css";
 
 interface Props {
   title?: string;
 }
 
-const { title = "10x Astro Starter" } = Astro.props;
+const { title = "MIMO" } = Astro.props;
+const user = Astro.locals.user;
 ---
 
 <!doctype html>
-<html lang='en'>
+<html lang='pl'>
   <head>
     <meta charset='UTF-8' />
     <meta name='viewport' content='width=device-width' />
@@ -18,7 +20,12 @@ const { title = "10x Astro Starter" } = Astro.props;
     <title>{title}</title>
   </head>
   <body>
-    <slot />
+    <Navigation user={user} />
+
+    <!-- Main content with padding for fixed nav -->
+    <div class='pt-16'>
+      <slot />
+    </div>
   </body>
 </html>
 
