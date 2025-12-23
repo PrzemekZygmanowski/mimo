@@ -4,10 +4,19 @@ import "../styles/global.css";
 
 interface Props {
   title?: string;
+  requireAuth?: boolean; // Opcjonalne wymuszenie uwierzytelnienia
 }
 
-const { title = "MIMO" } = Astro.props;
+const { title = "MIMO", requireAuth = false } = Astro.props;
 const user = Astro.locals.user;
+
+// Dodatkowa weryfikacja na poziomie strony
+if (requireAuth && !user) {
+  return Astro.redirect("/login");
+}
+
+// Sprawdzenie czy użytkownik ma zweryfikowany email (jeśli wymagane)
+const isEmailVerified = user?.email_confirmed_at !== null;
 ---
 
 <!doctype html>
@@ -22,10 +31,46 @@ const user = Astro.locals.user;
   <body>
     <Navigation user={user} />
 
-    <!-- Main content with padding for fixed nav -->
-    <div class='pt-16'>
+    <!-- Email verification banner dla zalogowanych użytkowników z niezweryfikowanym emailem -->
+    {
+      user && !isEmailVerified && (
+        <div
+          class='fixed top-16 left-0 right-0 z-40 bg-amber-500/90 backdrop-blur-sm text-amber-950 px-4 py-2 text-sm text-center'
+          role='alert'
+          aria-live='polite'>
+          <p>
+            <strong>Uwaga:</strong> Twój adres email nie został zweryfikowany. Sprawdź swoją skrzynkę pocztową.
+          </p>
+        </div>
+      )
+    }
+
+    <!-- Main content with padding for fixed nav (extra padding if banner visible) -->
+    <div class={user && !isEmailVerified ? "pt-28" : "pt-16"}>
       <slot />
     </div>
+
+    <!-- Debug info w trybie development -->
+    {
+      import.meta.env.DEV && (
+        <div
+          class='fixed bottom-4 right-4 bg-slate-900/90 text-slate-100 px-3 py-2 rounded-lg text-xs max-w-xs'
+          role='status'>
+          <p class='font-semibold mb-1'>Status użytkownika:</p>
+          <p>
+            {user ? (
+              <>
+                ✓ Zalogowany: {user.email}
+                <br />
+                Email zweryfikowany: {isEmailVerified ? "✓" : "✗"}
+              </>
+            ) : (
+              "✗ Niezalogowany"
+            )}
+          </p>
+        </div>
+      )
+    }
   </body>
 </html>
 
