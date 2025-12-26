@@ -25,13 +25,27 @@ export function RegisterForm() {
   const onSubmit = async (data: RegisterFormData) => {
     setError(null);
     setSuccess(false);
+
     try {
-      // TODO: Implementacja logiki rejestracji
-      // Placeholder - będzie zaimplementowane w kolejnym etapie
-      await Promise.resolve(data);
+      const response = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        setError(result.error || "Wystąpił błąd podczas rejestracji. Spróbuj ponownie.");
+        return;
+      }
+
+      // Success - show email confirmation message
       setSuccess(true);
     } catch {
-      setError("Wystąpił błąd podczas rejestracji. Spróbuj ponownie.");
+      setError("Nie można połączyć się z serwerem. Spróbuj ponownie.");
     }
   };
 

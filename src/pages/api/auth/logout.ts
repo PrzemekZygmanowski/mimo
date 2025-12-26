@@ -34,7 +34,6 @@ export const POST: APIRoute = async ({ locals, redirect, cookies }) => {
       cookies.delete(cookieName, { path: "/" });
     });
 
-
     // Redirect to login page
     return redirect("/login", 303);
   } catch (error) {

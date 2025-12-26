@@ -8,6 +8,7 @@ const PUBLIC_PATHS = [
   "/forgot-password",
   "/reset-password",
   "/api/auth/login", // Login endpoint
+  "/api/auth/register", // Register endpoint
 ];
 
 // Paths that should be accessible for authenticated users only

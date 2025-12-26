@@ -2,8 +2,13 @@
 import { RegisterForm } from "../components/RegisterForm";
 import Layout from "../layouts/Layout.astro";
 
-// Nie implementujemy jeszcze logiki sprawdzania sesji - to przyjdzie w kolejnym etapie
 export const prerender = false;
+
+// Check if user is already logged in
+const user = Astro.locals.user;
+if (user) {
+  return Astro.redirect("/");
+}
 ---
 
 <Layout title='Rejestracja - MIMO'>
