@@ -36,10 +36,16 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
     const { email: validatedEmail, password: validatedPassword } = validationResult.data;
 
+    // Get the origin for the email confirmation redirect
+    const origin = new URL(request.url).origin;
+
     // Attempt to sign up with Supabase
     const { data, error } = await locals.supabase.auth.signUp({
       email: validatedEmail,
       password: validatedPassword,
+      options: {
+        emailRedirectTo: `${origin}/auth/confirm`,
+      },
     });
 
     if (error) {

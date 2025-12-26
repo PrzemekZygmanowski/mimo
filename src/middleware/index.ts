@@ -7,6 +7,7 @@ const PUBLIC_PATHS = [
   "/register",
   "/forgot-password",
   "/reset-password",
+  "/auth/confirm", // Email confirmation page
   "/api/auth/login", // Login endpoint
   "/api/auth/register", // Register endpoint
 ];

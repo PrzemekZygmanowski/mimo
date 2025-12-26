@@ -1,0 +1,95 @@
+---
+import Layout from "../../layouts/Layout.astro";
+
+export const prerender = false;
+
+const url = new URL(Astro.request.url);
+const token_hash = url.searchParams.get("token_hash");
+const type = url.searchParams.get("type");
+
+let status: "success" | "error" | "invalid" = "invalid";
+let errorMessage = "";
+
+// Check if we have the required parameters
+if (token_hash && type === "email") {
+  try {
+    // Exchange the code for a session
+    const { error } = await Astro.locals.supabase.auth.verifyOtp({
+      token_hash,
+      type: "email",
+    });
+
+    if (error) {
+      status = "error";
+      errorMessage = "Link potwierdzający jest nieprawidłowy lub wygasł. Spróbuj zarejestrować się ponownie.";
+    } else {
+      status = "success";
+    }
+  } catch {
+    status = "error";
+    errorMessage = "Wystąpił nieoczekiwany błąd. Spróbuj ponownie później.";
+  }
+} else {
+  status = "invalid";
+  errorMessage = "Nieprawidłowy link potwierdzający. Sprawdź link w emailu i spróbuj ponownie.";
+}
+---
+
+<Layout title='Potwierdzenie konta - MIMO'>
+  <main
+    class='min-h-screen bg-gradient-to-br from-primary/5 via-background to-secondary/10 flex items-center justify-center p-4'>
+    <div class='w-full max-w-md mx-auto'>
+      <div class='bg-card rounded-xl shadow-lg border border-border p-8'>
+        {
+          status === "success" ? (
+            <div class='text-center space-y-4'>
+              <div class='w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto'>
+                <svg
+                  class='w-8 h-8 text-primary'
+                  fill='none'
+                  stroke='currentColor'
+                  viewBox='0 0 24 24'
+                  aria-hidden='true'>
+                  <path stroke-linecap='round' stroke-linejoin='round' stroke-width={2} d='M5 13l4 4L19 7' />
+                </svg>
+              </div>
+              <h2 class='text-2xl font-bold text-foreground'>Konto potwierdzone!</h2>
+              <p class='text-muted-foreground'>
+                Twoje konto zostało pomyślnie potwierdzone. Możesz się teraz zalogować.
+              </p>
+              <div class='pt-4'>
+                <a
+                  href='/login'
+                  class='inline-flex items-center justify-center rounded-md text-sm font-medium h-10 px-6 py-2 bg-primary text-primary-foreground shadow-sm hover:bg-primary/90 transition-all focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2'>
+                  Przejdź do logowania
+                </a>
+              </div>
+            </div>
+          ) : (
+            <div class='text-center space-y-4'>
+              <div class='w-16 h-16 bg-destructive/10 rounded-full flex items-center justify-center mx-auto'>
+                <svg
+                  class='w-8 h-8 text-destructive'
+                  fill='none'
+                  stroke='currentColor'
+                  viewBox='0 0 24 24'
+                  aria-hidden='true'>
+                  <path stroke-linecap='round' stroke-linejoin='round' stroke-width={2} d='M6 18L18 6M6 6l12 12' />
+                </svg>
+              </div>
+              <h2 class='text-2xl font-bold text-foreground'>Błąd potwierdzenia</h2>
+              <p class='text-muted-foreground'>{errorMessage}</p>
+              <div class='pt-4 space-x-4'>
+                <a
+                  href='/register'
+                  class='inline-flex items-center justify-center rounded-md text-sm font-medium h-10 px-6 py-2 bg-primary text-primary-foreground shadow-sm hover:bg-primary/90 transition-all focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2'>
+                  Zarejestruj się ponownie
+                </a>
+              </div>
+            </div>
+          )
+        }
+      </div>
+    </div>
+  </main>
+</Layout>
