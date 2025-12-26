@@ -7,12 +7,22 @@ const PUBLIC_PATHS = [
   "/register",
   "/forgot-password",
   "/reset-password",
-  "/api/auth/", // Auth API endpoints
+  "/api/auth/login", // Login endpoint
+];
+
+// Paths that should be accessible for authenticated users only
+const AUTH_ONLY_PATHS = [
+  "/api/auth/logout", // Logout endpoint
 ];
 
 // Helper function to check if the current path is public
 const isPublicPath = (pathname: string): boolean => {
   return PUBLIC_PATHS.some(publicPath => pathname.startsWith(publicPath));
+};
+
+// Helper function to check if the current path requires authentication
+const isAuthOnlyPath = (pathname: string): boolean => {
+  return AUTH_ONLY_PATHS.some(authPath => pathname.startsWith(authPath));
 };
 
 export const onRequest = defineMiddleware(async (context, next) => {
@@ -37,17 +47,23 @@ export const onRequest = defineMiddleware(async (context, next) => {
     context.locals.user = null;
   }
 
-  // Check if the path is public
+  // Check path type
   const isPublic = isPublicPath(pathname);
+  const isAuthOnly = isAuthOnlyPath(pathname);
 
-  // If the path is not public and user is not authenticated, redirect to login
-  if (!isPublic && !context.locals.user) {
+  // Auth-only paths: require authentication
+  if (isAuthOnly && !context.locals.user) {
     return context.redirect("/login");
   }
 
-  // If the user is authenticated and tries to access auth pages, redirect to home
+  // Public paths: redirect authenticated users away from auth pages
   if (isPublic && context.locals.user) {
     return context.redirect("/");
+  }
+
+  // Protected paths: require authentication
+  if (!isPublic && !isAuthOnly && !context.locals.user) {
+    return context.redirect("/login");
   }
 
   return next();

@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-import { logError } from "../../../lib/logger";
+import { logError, logInfo } from "../../../lib/logger";
 
 export const prerender = false;
 
@@ -11,14 +11,29 @@ export const prerender = false;
  * - 303: Redirect to login page after successful logout
  * - 500: Server error
  */
-export const POST: APIRoute = async ({ locals, redirect }) => {
+export const POST: APIRoute = async ({ locals, redirect, cookies }) => {
   try {
+    // Check if user is authenticated
+    if (!locals.user) {
+      return redirect("/login", 303);
+    }
+
+    // Sign out from Supabase
     const { error } = await locals.supabase.auth.signOut();
 
     if (error) {
-      logError("Logout error", error);
-      // Even if there's an error, we redirect to login (fail safely)
+      logInfo(`Logout error: ${error.message}`);
+    } else {
+      logInfo("Logout successful");
     }
+
+    // Clear all Supabase cookies manually as a fallback
+    const cookieNames = ["sb-access-token", "sb-refresh-token", "sb-auth-token"];
+
+    cookieNames.forEach(cookieName => {
+      cookies.delete(cookieName, { path: "/" });
+    });
+
 
     // Redirect to login page
     return redirect("/login", 303);
