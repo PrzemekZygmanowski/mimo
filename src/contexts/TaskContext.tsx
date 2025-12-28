@@ -73,14 +73,12 @@ export function TaskProvider({ children }: TaskProviderProps) {
       const userTask = tasks[0];
 
       // Fetch template details for the task
-      const templateResponse = await fetch(`/api/task-templates?id=${userTask.template_id}`);
-
+      const templateResponse = await fetch(`/api/task-templates/${userTask.template_id}`);
       if (!templateResponse.ok) {
         throw new Error("Nie udało się pobrać szczegółów zadania");
       }
 
-      const templates: TaskTemplateDTO[] = await templateResponse.json();
-      const template = templates[0];
+      const template: TaskTemplateDTO = await templateResponse.json();
 
       if (!template) {
         throw new Error("Nie znaleziono szablonu zadania");
