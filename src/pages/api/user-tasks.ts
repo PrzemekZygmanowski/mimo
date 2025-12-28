@@ -1,16 +1,26 @@
+import type { SupabaseClient } from "@supabase/supabase-js";
 import type { APIRoute } from "astro";
 import { z, ZodError } from "zod";
+import type { Database } from "../../db/database.types";
 import { logError } from "../../lib/logger";
-import type { UserTaskDTO } from "../../types";
+import { createUserTask } from "../../lib/services/userTasksService";
+import type { CreateUserTaskCommand, UserTaskDTO } from "../../types";
 
 export const prerender = false;
 
-// Schema for validating query parameters
+// Schema for validating query parameters (GET)
 const querySchema = z.object({
   page: z.coerce.number().int().min(1).optional(),
   limit: z.coerce.number().int().min(1).optional(),
   status: z.string().optional(),
   date: z.string().optional(),
+});
+
+// Schema for validating request body (POST)
+const createUserTaskSchema = z.object({
+  template_id: z.number().int().positive("template_id must be a positive integer"),
+  user_id: z.string().uuid("user_id must be a valid UUID"),
+  check_in_id: z.number().int().positive().nullable().optional(),
 });
 
 /**
@@ -60,7 +70,7 @@ export const GET: APIRoute = async ({ request, locals }) => {
       logError("Error fetching user tasks", dbError);
       return new Response(JSON.stringify({ error: "Internal Server Error" }), { status: 500 });
     }
-    const result: UserTaskDTO[] = (tasks ?? []).map((row: any) => ({
+    const result: UserTaskDTO[] = (tasks ?? []).map(row => ({
       id: row.id,
       check_in_id: row.check_in_id,
       created_at: row.created_at,
@@ -79,5 +89,75 @@ export const GET: APIRoute = async ({ request, locals }) => {
     const message = err instanceof Error ? err.message : "Internal Server Error";
     const statusCode = err instanceof ZodError ? 400 : 500;
     return new Response(JSON.stringify({ error: message }), { status: statusCode });
+  }
+};
+
+/**
+ * POST /api/user-tasks
+ * Creates a new user task by assigning a task template to a user.
+ * Request Body:
+ *  - template_id: number (required)
+ *  - user_id: string (UUID, required)
+ *  - check_in_id: number (optional)
+ *
+ * Returns 201 with the created UserTaskDTO on success.
+ * Returns 400 for invalid input, 401 for unauthorized, 404 for missing resources, 500 for server errors.
+ */
+export const POST: APIRoute = async ({ request, locals }) => {
+  // Step 0: Cast Supabase client to Database-typed instance
+  const supabase = locals.supabase as SupabaseClient<Database>;
+
+  try {
+    // Step 1: Parse and validate request body
+    const body = await request.json();
+    const validatedData = createUserTaskSchema.parse(body);
+
+    // Step 2: Authenticate user
+    const {
+      data: { user },
+      error: authError,
+    } = await locals.supabase.auth.getUser();
+    if (authError || !user) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
+    }
+
+    // Step 3: Verify user can create task (user_id must match authenticated user or have admin privileges)
+    // For now, we enforce that user_id must match the authenticated user
+    if (validatedData.user_id !== user.id) {
+      return new Response(JSON.stringify({ error: "Forbidden: Cannot create tasks for other users" }), { status: 403 });
+    }
+
+    // Step 4: Prepare task creation command with task_date set to today
+    const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD format
+    const command: CreateUserTaskCommand = {
+      template_id: validatedData.template_id,
+      user_id: validatedData.user_id,
+      check_in_id: validatedData.check_in_id ?? null,
+      task_date: today,
+    };
+
+    // Step 5: Create user task via service
+    const createdTask = await createUserTask(supabase, command);
+
+    // Step 6: Return created task with 201 status
+    return new Response(JSON.stringify(createdTask), { status: 201 });
+  } catch (err: unknown) {
+    if (err instanceof ZodError) {
+      return new Response(JSON.stringify({ error: err.errors }), { status: 400 });
+    }
+
+    // Handle specific error cases from service layer
+    if (err instanceof Error) {
+      if (err.message.includes("not found") || err.message.includes("does not exist")) {
+        return new Response(JSON.stringify({ error: err.message }), { status: 404 });
+      }
+      if (err.message.includes("already exists") || err.message.includes("duplicate")) {
+        return new Response(JSON.stringify({ error: err.message }), { status: 400 });
+      }
+    }
+
+    logError("Error in POST /api/user-tasks", err);
+    const message = err instanceof Error ? err.message : "Internal Server Error";
+    return new Response(JSON.stringify({ error: message }), { status: 500 });
   }
 };

@@ -1,9 +1,17 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { GET } from "./user-tasks";
+import { GET, POST } from "./user-tasks";
+
+// Mock the userTasksService module
+vi.mock("../../lib/services/userTasksService", () => ({
+  createUserTask: vi.fn(),
+}));
+
+import { createUserTask } from "../../lib/services/userTasksService";
 
 // Mock Supabase client
 let mockSupabase: any;
 beforeEach(() => {
+  vi.clearAllMocks();
   mockSupabase = {
     auth: {
       getUser: vi.fn().mockResolvedValue({ data: { user: { id: "user-1" } }, error: null }),
@@ -81,5 +89,218 @@ describe("GET /api/user-tasks", () => {
       locals: { supabase: mockSupabase },
     } as any);
     expect(response.status).toBe(401);
+  });
+});
+
+describe("POST /api/user-tasks", () => {
+  const validBody = {
+    template_id: 1,
+    user_id: "user-1",
+    check_in_id: null,
+  };
+
+  it("returns 201 and created task on success", async () => {
+    const createdTask = {
+      id: 10,
+      user_id: "user-1",
+      template_id: 1,
+      check_in_id: null,
+      task_date: "2025-10-12",
+      expires_at: "2025-10-13T12:00:00Z",
+      status: "pending",
+      new_task_requests: 0,
+      metadata: null,
+      created_at: "2025-10-12T12:00:00Z",
+      updated_at: null,
+    };
+
+    (createUserTask as any).mockResolvedValue(createdTask);
+
+    const response = await POST({
+      request: new Request("http://localhost/api/user-tasks", {
+        method: "POST",
+        body: JSON.stringify(validBody),
+      }),
+      locals: { supabase: mockSupabase },
+    } as any);
+
+    expect(response.status).toBe(201);
+    const body = await response.json();
+    expect(body).toEqual(createdTask);
+  });
+
+  it("returns 201 when check_in_id is provided", async () => {
+    const bodyWithCheckIn = {
+      template_id: 1,
+      user_id: "user-1",
+      check_in_id: 5,
+    };
+
+    const createdTask = {
+      id: 10,
+      user_id: "user-1",
+      template_id: 1,
+      check_in_id: 5,
+      task_date: "2025-10-12",
+      expires_at: "2025-10-13T12:00:00Z",
+      status: "pending",
+      new_task_requests: 0,
+      metadata: null,
+      created_at: "2025-10-12T12:00:00Z",
+      updated_at: null,
+    };
+
+    (createUserTask as any).mockResolvedValue(createdTask);
+
+    const response = await POST({
+      request: new Request("http://localhost/api/user-tasks", {
+        method: "POST",
+        body: JSON.stringify(bodyWithCheckIn),
+      }),
+      locals: { supabase: mockSupabase },
+    } as any);
+
+    expect(response.status).toBe(201);
+    const body = await response.json();
+    expect(body.check_in_id).toBe(5);
+  });
+
+  it("returns 400 for invalid request body - missing template_id", async () => {
+    const invalidBody = {
+      user_id: "user-1",
+    };
+
+    const response = await POST({
+      request: new Request("http://localhost/api/user-tasks", {
+        method: "POST",
+        body: JSON.stringify(invalidBody),
+      }),
+      locals: { supabase: mockSupabase },
+    } as any);
+
+    expect(response.status).toBe(400);
+    const body = await response.json();
+    expect(body).toHaveProperty("error");
+  });
+
+  it("returns 400 for invalid request body - invalid user_id format", async () => {
+    const invalidBody = {
+      template_id: 1,
+      user_id: "not-a-uuid",
+    };
+
+    const response = await POST({
+      request: new Request("http://localhost/api/user-tasks", {
+        method: "POST",
+        body: JSON.stringify(invalidBody),
+      }),
+      locals: { supabase: mockSupabase },
+    } as any);
+
+    expect(response.status).toBe(400);
+    const body = await response.json();
+    expect(body).toHaveProperty("error");
+  });
+
+  it("returns 400 for invalid request body - negative template_id", async () => {
+    const invalidBody = {
+      template_id: -1,
+      user_id: "550e8400-e29b-41d4-a716-446655440000",
+    };
+
+    const response = await POST({
+      request: new Request("http://localhost/api/user-tasks", {
+        method: "POST",
+        body: JSON.stringify(invalidBody),
+      }),
+      locals: { supabase: mockSupabase },
+    } as any);
+
+    expect(response.status).toBe(400);
+    const body = await response.json();
+    expect(body).toHaveProperty("error");
+  });
+
+  it("returns 401 when unauthorized", async () => {
+    mockSupabase.auth.getUser = vi.fn().mockResolvedValue({ data: { user: null }, error: {} });
+
+    const response = await POST({
+      request: new Request("http://localhost/api/user-tasks", {
+        method: "POST",
+        body: JSON.stringify(validBody),
+      }),
+      locals: { supabase: mockSupabase },
+    } as any);
+
+    expect(response.status).toBe(401);
+    const body = await response.json();
+    expect(body).toHaveProperty("error");
+  });
+
+  it("returns 403 when user tries to create task for another user", async () => {
+    const bodyForOtherUser = {
+      template_id: 1,
+      user_id: "user-2", // different from authenticated user (user-1)
+    };
+
+    const response = await POST({
+      request: new Request("http://localhost/api/user-tasks", {
+        method: "POST",
+        body: JSON.stringify(bodyForOtherUser),
+      }),
+      locals: { supabase: mockSupabase },
+    } as any);
+
+    expect(response.status).toBe(403);
+    const body = await response.json();
+    expect(body.error).toContain("Cannot create tasks for other users");
+  });
+
+  it("returns 404 when template does not exist", async () => {
+    (createUserTask as any).mockRejectedValue(new Error("Task template with id 999 not found"));
+
+    const response = await POST({
+      request: new Request("http://localhost/api/user-tasks", {
+        method: "POST",
+        body: JSON.stringify({ ...validBody, template_id: 999 }),
+      }),
+      locals: { supabase: mockSupabase },
+    } as any);
+
+    expect(response.status).toBe(404);
+    const body = await response.json();
+    expect(body.error).toContain("not found");
+  });
+
+  it("returns 400 when task already exists for user on the same date", async () => {
+    (createUserTask as any).mockRejectedValue(new Error("A task already exists for user user-1 on date 2025-10-12"));
+
+    const response = await POST({
+      request: new Request("http://localhost/api/user-tasks", {
+        method: "POST",
+        body: JSON.stringify(validBody),
+      }),
+      locals: { supabase: mockSupabase },
+    } as any);
+
+    expect(response.status).toBe(400);
+    const body = await response.json();
+    expect(body.error).toContain("already exists");
+  });
+
+  it("returns 500 for unexpected server errors", async () => {
+    (createUserTask as any).mockRejectedValue(new Error("Unexpected database error"));
+
+    const response = await POST({
+      request: new Request("http://localhost/api/user-tasks", {
+        method: "POST",
+        body: JSON.stringify(validBody),
+      }),
+      locals: { supabase: mockSupabase },
+    } as any);
+
+    expect(response.status).toBe(500);
+    const body = await response.json();
+    expect(body).toHaveProperty("error");
   });
 });
