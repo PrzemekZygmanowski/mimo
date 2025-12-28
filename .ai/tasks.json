@@ -1,8 +1,5 @@
 [
   {
-    "id": 1,
-    "created_at": null,
-    "updated_at": null,
     "title": "Dziennik Wdzięczności",
     "description": "Spędź pięć minut na zapisaniu trzech rzeczy, za które jesteś wdzięczny.",
     "metadata": null,
@@ -10,9 +7,6 @@
     "required_mood_level": 1
   },
   {
-    "id": 2,
-    "created_at": null,
-    "updated_at": null,
     "title": "Świadome Oddychanie",
     "description": "Ćwicz głębokie oddychanie przez trzy minuty, koncentrując się na powolnym wdechu i wydechu.",
     "metadata": null,
@@ -20,9 +14,6 @@
     "required_mood_level": 1
   },
   {
-    "id": 3,
-    "created_at": null,
-    "updated_at": null,
     "title": "Krótki Spacer",
     "description": "Wybierz się na 10-minutowy spacer na zewnątrz, zwracając uwagę na otoczenie.",
     "metadata": null,
@@ -30,9 +21,6 @@
     "required_mood_level": 2
   },
   {
-    "id": 4,
-    "created_at": null,
-    "updated_at": null,
     "title": "Zadzwoń do Przyjaciela",
     "description": "Skontaktuj się z przyjacielem lub członkiem rodziny i prowadź krótką, wspierającą rozmowę.",
     "metadata": null,
@@ -40,9 +28,6 @@
     "required_mood_level": 3
   },
   {
-    "id": 5,
-    "created_at": null,
-    "updated_at": null,
     "title": "Pozytywne Afirmacje",
     "description": "Zapisz pozytywną afirmację i powiedz ją na głos trzy razy.",
     "metadata": null,
@@ -50,9 +35,6 @@
     "required_mood_level": 1
   },
   {
-    "id": 6,
-    "created_at": null,
-    "updated_at": null,
     "title": "Łagodne Rozciąganie",
     "description": "Wykonaj 10 delikatnych ćwiczeń rozciągających, aby rozluźnić ciało.",
     "metadata": null,
@@ -60,9 +42,6 @@
     "required_mood_level": 2
   },
   {
-    "id": 7,
-    "created_at": null,
-    "updated_at": null,
     "title": "Nawodnienie i Przekąska",
     "description": "Wypij szklankę wody i przygotuj zdrową przekąskę.",
     "metadata": null,
@@ -70,9 +49,6 @@
     "required_mood_level": 1
   },
   {
-    "id": 8,
-    "created_at": null,
-    "updated_at": null,
     "title": "Pobudzająca Muzyka",
     "description": "Posłuchaj ulubionego, dodającego energii utworu lub playlisty przez pięć minut.",
     "metadata": null,
@@ -80,9 +56,6 @@
     "required_mood_level": 1
   },
   {
-    "id": 9,
-    "created_at": null,
-    "updated_at": null,
     "title": "Zaplanuj Mały Cel",
     "description": "Zapisz jeden mały, osiągalny cel, który możesz dziś zrealizować.",
     "metadata": null,
@@ -90,9 +63,6 @@
     "required_mood_level": 2
   },
   {
-    "id": 10,
-    "created_at": null,
-    "updated_at": null,
     "title": "Przerwa na Naturę",
     "description": "Spędź pięć minut na zewnątrz lub przy otwartym oknie, obserwując przyrodę.",
     "metadata": null,
@@ -100,9 +70,6 @@
     "required_mood_level": 1
   },
   {
-    "id": 11,
-    "created_at": null,
-    "updated_at": null,
     "title": "Oddychanie w Pudełku",
     "description": "Ćwicz technikę oddychania w pudełku: wdech 4 s, pauza 4 s, wydech 4 s, pauza 4 s, powtórz przez dwie minuty.",
     "metadata": null,
@@ -110,9 +77,6 @@
     "required_mood_level": 1
   },
   {
-    "id": 12,
-    "created_at": null,
-    "updated_at": null,
     "title": "Kreatywne Bazgroły",
     "description": "Spędź pięć minut na rysowaniu lub kolorowaniu, aby wyrazić siebie.",
     "metadata": null,
@@ -120,9 +84,6 @@
     "required_mood_level": 1
   },
   {
-    "id": 13,
-    "created_at": null,
-    "updated_at": null,
     "title": "Wypisz Swoje Mocne Strony",
     "description": "Zapisz trzy swoje mocne strony lub osiągnięcia.",
     "metadata": null,
@@ -130,9 +91,6 @@
     "required_mood_level": 2
   },
   {
-    "id": 14,
-    "created_at": null,
-    "updated_at": null,
     "title": "Krótka Sesja Jogi",
     "description": "Ćwicz pięciominutową sesję jogi dla początkujących, aby rozciągnąć ciało i dodać energii.",
     "metadata": null,
@@ -140,9 +98,6 @@
     "required_mood_level": 2
   },
   {
-    "id": 15,
-    "created_at": null,
-    "updated_at": null,
     "title": "Przypomnienie Pozytywnego Wspomnienia",
     "description": "Zapisz jedno pozytywne wspomnienie w szczegółach i zastanów się nad nim.",
     "metadata": null,
@@ -150,9 +105,6 @@
     "required_mood_level": 2
   },
   {
-    "id": 16,
-    "created_at": null,
-    "updated_at": null,
     "title": "Szklanka Ciepłej Herbaty",
     "description": "Zaparz sobie ulubioną herbatę i usiądź na chwilę, skupiając się na smaku i cieple kubka.",
     "metadata": null,
@@ -160,9 +112,6 @@
     "required_mood_level": 1
   },
   {
-    "id": 17,
-    "created_at": null,
-    "updated_at": null,
     "title": "Trzy Głębokie Westchnienia Ulgi",
     "description": "Stań lub usiądź wygodnie i wykonaj trzy długie, świadome westchnienia, wypuszczając napięcie.",
     "metadata": null,
@@ -170,9 +119,6 @@
     "required_mood_level": 1
   },
   {
-    "id": 18,
-    "created_at": null,
-    "updated_at": null,
     "title": "Porządek na Dłoni",
     "description": "Poświęć 3 minuty na uporządkowanie małej przestrzeni: półki, szuflady lub powierzchni biurka.",
     "metadata": null,
@@ -180,9 +126,6 @@
     "required_mood_level": 2
   },
   {
-    "id": 19,
-    "created_at": null,
-    "updated_at": null,
     "title": "Mikro-Spacer Po Pokoju",
     "description": "Przejdź powoli kilka okrążeń po pokoju, licząc kroki do dziesięciu i zaczynając od nowa.",
     "metadata": null,
@@ -190,9 +133,6 @@
     "required_mood_level": 1
   },
   {
-    "id": 20,
-    "created_at": null,
-    "updated_at": null,
     "title": "Kartka Życzliwości Dla Siebie",
     "description": "Napisz krótką wiadomość do siebie z życzliwym zdaniem, jakiego potrzebujesz dziś usłyszeć.",
     "metadata": null,
@@ -200,9 +140,6 @@
     "required_mood_level": 2
   },
   {
-    "id": 21,
-    "created_at": null,
-    "updated_at": null,
     "title": "Okno i Światło",
     "description": "Otwórz okno lub zasłoń zasłony i stań przez minutę w naturalnym świetle, obserwując oddech.",
     "metadata": null,
@@ -210,9 +147,6 @@
     "required_mood_level": 1
   },
   {
-    "id": 22,
-    "created_at": null,
-    "updated_at": null,
     "title": "Lista Trzech Drobnostek",
     "description": "Zapisz trzy małe rzeczy, które dziś możesz zrobić bez pośpiechu. Wybierz jedną z nich.",
     "metadata": null,
@@ -220,9 +154,6 @@
     "required_mood_level": 2
   },
   {
-    "id": 23,
-    "created_at": null,
-    "updated_at": null,
     "title": "Rozciąganie Ramion i Szyi",
     "description": "Wykonaj delikatne krążenia barków i przechylenia głowy na boki przez 2–3 minuty.",
     "metadata": null,
@@ -230,9 +161,6 @@
     "required_mood_level": 1
   },
   {
-    "id": 24,
-    "created_at": null,
-    "updated_at": null,
     "title": "Minuta Ciszy",
     "description": "Ustaw minutnik na 60 sekund i posiedź w ciszy, zauważając dźwięki wokół bez oceniania.",
     "metadata": null,
@@ -240,9 +168,6 @@
     "required_mood_level": 1
   },
   {
-    "id": 25,
-    "created_at": null,
-    "updated_at": null,
     "title": "Krótki Porządek Cyfrowy",
     "description": "Usuń lub zarchiwizuj pięć zbędnych elementów z pulpitu, folderu lub skrzynki mailowej.",
     "metadata": null,
@@ -250,9 +175,6 @@
     "required_mood_level": 2
   },
   {
-    "id": 26,
-    "created_at": null,
-    "updated_at": null,
     "title": "Uśmiech do Siebie w Lustrze",
     "description": "Spójrz w lustro i uśmiechnij się do siebie przez kilka chwil, zauważając, co czujesz.",
     "metadata": null,
@@ -260,9 +182,6 @@
     "required_mood_level": 2
   },
   {
-    "id": 27,
-    "created_at": null,
-    "updated_at": null,
     "title": "3-2-1: Zmysłowa Kotwica",
     "description": "Nazwij 3 rzeczy, które widzisz, 2, które słyszysz, i 1, którą czujesz dotykiem.",
     "metadata": null,
@@ -270,9 +189,6 @@
     "required_mood_level": 1
   },
   {
-    "id": 28,
-    "created_at": null,
-    "updated_at": null,
     "title": "10-Minutowy Spacer Energii",
     "description": "Wyjdź na krótki, żwawy spacer. Skup się na rytmie kroków i oddychaniu.",
     "metadata": null,
@@ -280,9 +196,6 @@
     "required_mood_level": 3
   },
   {
-    "id": 29,
-    "created_at": null,
-    "updated_at": null,
     "title": "Krąg Komfortu",
     "description": "Wybierz jedną rzecz, która daje Ci komfort (koc, poduszka, ulubiony napój) i poświęć 5 minut, by z niej skorzystać świadomie.",
     "metadata": null,
@@ -290,9 +203,6 @@
     "required_mood_level": 1
   },
   {
-    "id": 30,
-    "created_at": null,
-    "updated_at": null,
     "title": "Szybki Kontakt",
     "description": "Wyślij krótką wiadomość do kogoś zaufanego: jedno zdanie o tym, jak się dziś masz.",
     "metadata": null,
@@ -300,9 +210,6 @@
     "required_mood_level": 3
   },
   {
-    "id": 31,
-    "created_at": null,
-    "updated_at": null,
     "title": "Spacer z Intencją",
     "description": "Wybierz się na 20-minutowy spacer, starając się iść świadomie — zwracaj uwagę na kolory, zapachy i dźwięki wokół.",
     "metadata": null,
@@ -310,9 +217,6 @@
     "required_mood_level": 3
   },
   {
-    "id": 32,
-    "created_at": null,
-    "updated_at": null,
     "title": "Porządek w Przestrzeni",
     "description": "Uprzątnij jedno konkretne miejsce w swoim otoczeniu (biurko, stół, półkę), poświęcając na to 15 minut.",
     "metadata": null,
@@ -320,9 +224,6 @@
     "required_mood_level": 2
   },
   {
-    "id": 33,
-    "created_at": null,
-    "updated_at": null,
     "title": "Czas Offline",
     "description": "Odłóż telefon i inne urządzenia na 30 minut. Zajmij się czymś niecyfrowym – czytaniem, pisaniem lub obserwacją otoczenia.",
     "metadata": null,
@@ -330,9 +231,6 @@
     "required_mood_level": 2
   },
   {
-    "id": 34,
-    "created_at": null,
-    "updated_at": null,
     "title": "Nowy Przepis",
     "description": "Przygotuj prosty, zdrowy posiłek lub przekąskę, której jeszcze nie próbowałeś.",
     "metadata": null,
@@ -340,9 +238,6 @@
     "required_mood_level": 3
   },
   {
-    "id": 35,
-    "created_at": null,
-    "updated_at": null,
     "title": "Rozciąganie Pełnego Ciała",
     "description": "Wykonaj 10-minutową sesję rozciągania, skupiając się na każdym obszarze ciała po kolei.",
     "metadata": null,
@@ -350,9 +245,6 @@
     "required_mood_level": 2
   },
   {
-    "id": 36,
-    "created_at": null,
-    "updated_at": null,
     "title": "Pisanie Bez Cenzury",
     "description": "Poświęć 10 minut na zapisanie wszystkiego, co przychodzi Ci do głowy — bez oceniania i bez przerwy.",
     "metadata": null,
@@ -360,9 +252,6 @@
     "required_mood_level": 2
   },
   {
-    "id": 37,
-    "created_at": null,
-    "updated_at": null,
     "title": "Domowa Aktywność",
     "description": "Zrób 15 minut lekkiego ruchu: taniec, krótki trening, sprzątanie w rytmie muzyki.",
     "metadata": null,
@@ -370,9 +259,6 @@
     "required_mood_level": 3
   },
   {
-    "id": 38,
-    "created_at": null,
-    "updated_at": null,
     "title": "Mały Cel na Tydzień",
     "description": "Zapisz jeden mały, realny cel na nadchodzący tydzień i określ pierwszy krok, by go rozpocząć.",
     "metadata": null,
@@ -380,9 +266,6 @@
     "required_mood_level": 2
   },
   {
-    "id": 39,
-    "created_at": null,
-    "updated_at": null,
     "title": "Poranna Rutyna",
     "description": "Ułóż i przetestuj 10-minutową poranną rutynę: szklanka wody, rozciąganie, chwila wdzięczności.",
     "metadata": null,
@@ -390,9 +273,6 @@
     "required_mood_level": 3
   },
   {
-    "id": 40,
-    "created_at": null,
-    "updated_at": null,
     "title": "Cicha Godzina",
     "description": "Spędź godzinę bez muzyki, telefonu i rozmów. Zauważ, jak zmienia się Twój nastrój w ciszy.",
     "metadata": null,
@@ -400,9 +280,6 @@
     "required_mood_level": 3
   },
   {
-    "id": 41,
-    "created_at": null,
-    "updated_at": null,
     "title": "Dziennik Emocji",
     "description": "Zapisz, jakie emocje czułeś dziś w trzech momentach dnia. Nazwij je i zastanów się, co je wywołało.",
     "metadata": null,
@@ -410,9 +287,6 @@
     "required_mood_level": 2
   },
   {
-    "id": 42,
-    "created_at": null,
-    "updated_at": null,
     "title": "Działanie dla Kogoś",
     "description": "Zrób drobny gest dla innej osoby — napisz wiadomość, pochwal, pomóż w czymś drobnym.",
     "metadata": null,
@@ -420,9 +294,6 @@
     "required_mood_level": 3
   },
   {
-    "id": 43,
-    "created_at": null,
-    "updated_at": null,
     "title": "Nowe Doświadczenie",
     "description": "Zrób coś, czego dawno nie robiłeś lub jeszcze nigdy – może to być nowa trasa spaceru albo nowy utwór muzyczny.",
     "metadata": null,
@@ -430,9 +301,6 @@
     "required_mood_level": 3
   },
   {
-    "id": 44,
-    "created_at": null,
-    "updated_at": null,
     "title": "Mały Detoks Cyfrowy",
     "description": "Usuń jedną niepotrzebną aplikację lub zrezygnuj z social mediów na resztę dnia.",
     "metadata": null,
@@ -440,9 +308,6 @@
     "required_mood_level": 2
   },
   {
-    "id": 45,
-    "created_at": null,
-    "updated_at": null,
     "title": "Wieczorne Podsumowanie",
     "description": "Zapisz trzy rzeczy, które zrobiłeś dziś dobrze, nawet jeśli wydają się drobne.",
     "metadata": null,
@@ -450,9 +315,6 @@
     "required_mood_level": 2
   },
   {
-    "id": 46,
-    "created_at": null,
-    "updated_at": null,
     "title": "List do Przyszłego Siebie",
     "description": "Napisz krótki list do siebie z przyszłości — co chciałbyś, żeby Twój przyszły ja wiedział lub zapamiętał.",
     "metadata": null,
@@ -460,9 +322,6 @@
     "required_mood_level": 2
   },
   {
-    "id": 47,
-    "created_at": null,
-    "updated_at": null,
     "title": "Obserwacja Chmur",
     "description": "Połóż się lub usiądź wygodnie i przez kilka minut obserwuj niebo, starając się rozpoznać kształty w chmurach.",
     "metadata": null,
@@ -470,9 +329,6 @@
     "required_mood_level": 1
   },
   {
-    "id": 48,
-    "created_at": null,
-    "updated_at": null,
     "title": "Muzyczna Medytacja",
     "description": "Wybierz spokojny utwór muzyczny i słuchaj go uważnie od początku do końca, koncentrując się na każdym dźwięku.",
     "metadata": null,
@@ -480,9 +336,6 @@
     "required_mood_level": 1
   },
   {
-    "id": 49,
-    "created_at": null,
-    "updated_at": null,
     "title": "Kąpiel Dźwięków",
     "description": "Znajdź nagranie natury (deszcz, morze, las) i przez kilka minut wsłuchuj się w nie, oddychając spokojnie.",
     "metadata": null,
@@ -490,9 +343,6 @@
     "required_mood_level": 1
   },
   {
-    "id": 50,
-    "created_at": null,
-    "updated_at": null,
     "title": "Stwórz Tablicę Inspiracji",
     "description": "Zbierz kilka obrazków, cytatów lub słów, które Cię inspirują, i ułóż je w jednym miejscu — na kartce lub cyfrowo.",
     "metadata": null,
@@ -500,9 +350,6 @@
     "required_mood_level": 3
   },
   {
-    "id": 51,
-    "created_at": null,
-    "updated_at": null,
     "title": "Krótka Medytacja Wdzięczności",
     "description": "Zamknij oczy i pomyśl o jednej osobie lub sytuacji, za którą czujesz wdzięczność. Utrzymaj tę myśl przez minutę.",
     "metadata": null,
@@ -510,9 +357,6 @@
     "required_mood_level": 1
   },
   {
-    "id": 52,
-    "created_at": null,
-    "updated_at": null,
     "title": "Rysuj Swoje Myśli",
     "description": "Weź kartkę i narysuj to, jak się dziś czujesz — bez myślenia o efekcie końcowym.",
     "metadata": null,
@@ -520,9 +364,6 @@
     "required_mood_level": 1
   },
   {
-    "id": 53,
-    "created_at": null,
-    "updated_at": null,
     "title": "Zrób Coś po Raz Pierwszy",
     "description": "Spróbuj dziś czegoś, czego nigdy nie robiłeś — może nowy napój, trasa spaceru lub przepis.",
     "metadata": null,
@@ -530,9 +371,6 @@
     "required_mood_level": 3
   },
   {
-    "id": 54,
-    "created_at": null,
-    "updated_at": null,
     "title": "Uważne Picie Kawy lub Herbaty",
     "description": "Przygotuj swój napój i pij go świadomie — skup się na aromacie, temperaturze i smaku każdego łyku.",
     "metadata": null,
@@ -540,9 +378,6 @@
     "required_mood_level": 1
   },
   {
-    "id": 55,
-    "created_at": null,
-    "updated_at": null,
     "title": "Zrób Coś Dla Przyszłego Siebie",
     "description": "Zrób drobną rzecz, która jutro Ci pomoże — przygotuj ubrania, spakuj torbę, zapisz przypomnienie.",
     "metadata": null,
@@ -550,9 +385,6 @@
     "required_mood_level": 2
   },
   {
-    "id": 56,
-    "created_at": null,
-    "updated_at": null,
     "title": "Zrób Zdjęcie Czegoś Pięknego",
     "description": "Zrób jedno zdjęcie czegoś, co dziś uznasz za ładne — może to być światło, cień lub detal otoczenia.",
     "metadata": null,
@@ -560,9 +392,6 @@
     "required_mood_level": 2
   },
   {
-    "id": 57,
-    "created_at": null,
-    "updated_at": null,
     "title": "Uważny Prysznic",
     "description": "Podczas kąpieli skup się na odczuciach: temperaturze wody, zapachu mydła, dźwiękach i oddechu.",
     "metadata": null,
@@ -570,19 +399,13 @@
     "required_mood_level": 1
   },
   {
-    "id": 58,
-    "created_at": null,
-    "updated_at": null,
     "title": "Napisz Jedno Zdanie o Sobie",
-    "description": "Zapisz jedno zdanie, które zaczyna się od „Jestem…” i które oddaje Twój obecny stan lub potrzebę.",
+    "description": "Zapisz jedno zdanie, które zaczyna się od 'Jestem…' i które oddaje Twój obecny stan lub potrzebę.",
     "metadata": null,
     "required_energy_level": 1,
     "required_mood_level": 1
   },
   {
-    "id": 59,
-    "created_at": null,
-    "updated_at": null,
     "title": "Wdzięczność dla Ciała",
     "description": "Zastanów się, za co dziś możesz podziękować swojemu ciału — nawet za coś drobnego, jak oddech czy ruch.",
     "metadata": null,
@@ -590,9 +413,6 @@
     "required_mood_level": 1
   },
   {
-    "id": 60,
-    "created_at": null,
-    "updated_at": null,
     "title": "Zaplanuj Dzień Dobrych Słów",
     "description": "Postanów, że przez jeden dzień będziesz mówić (lub myśleć) o sobie i innych tylko w życzliwy sposób.",
     "metadata": null,
