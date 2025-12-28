@@ -15,6 +15,7 @@ Endpoint służy do przypisywania nowego zadania użytkownikowi, wywoływanego p
   - **Opcjonalne:**
     - `check_in_id` - identyfikator check-inu (BIGINT), jeśli zadanie jest generowane w wyniku check-inu
 - **Request Body:**
+
   ```json
   {
     "template_id": "template-id",
