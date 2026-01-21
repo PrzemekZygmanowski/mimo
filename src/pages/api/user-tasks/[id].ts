@@ -3,6 +3,7 @@ import type { APIRoute } from "astro";
 import { z, ZodError } from "zod";
 import type { Database } from "../../../db/database.types";
 import { logError } from "../../../lib/logger";
+import { getUserTaskById } from "../../../lib/services/userTasksService";
 
 export const prerender = false;
 
@@ -14,13 +15,84 @@ const paramsSchema = z.object({
     .transform(val => parseInt(val, 10)),
 });
 
-// Schema for validating request body
+// Schema for validating request body (used in PATCH)
 const bodySchema = z.object({
   status: z.string().refine(val => ["pending", "completed", "skipped"].includes(val), {
     message: "Invalid status value",
   }),
   new_task_requests: z.number().int().min(0).max(3).optional(),
 });
+
+/**
+ * GET /api/user-tasks/:id
+ *
+ * Retrieves a user task identified by `id` for the authenticated user.
+ *
+ * Path Parameters:
+ *   - id: number (task identifier)
+ *
+ * Responses:
+ *   - 200: Returns the UserTaskDTO
+ *   - 400: Invalid request input (invalid id format)
+ *   - 401: Unauthorized (user not authenticated)
+ *   - 404: Task not found or not owned by user
+ *   - 500: Internal Server Error
+ */
+export const GET: APIRoute = async ({ params, locals }) => {
+  // Step 0: Cast Supabase client to Database-typed instance
+  const supabase = locals.supabase as SupabaseClient<Database>;
+
+  try {
+    // Step 1: Validate and parse "id" path parameter
+    const { id } = paramsSchema.parse(params);
+
+    // Step 2: Authenticate user via Supabase auth
+    const {
+      data: { user },
+      error: authError,
+    } = await locals.supabase.auth.getUser();
+
+    if (authError || !user) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    // Step 3: Fetch user task using service layer
+    const task = await getUserTaskById(supabase, id, user.id);
+
+    // Step 4: Handle not found case
+    if (!task) {
+      return new Response(JSON.stringify({ error: "Not Found" }), {
+        status: 404,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    // Step 5: Return task as JSON response
+    return new Response(JSON.stringify(task), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+  } catch (err: unknown) {
+    // Handle validation errors
+    if (err instanceof ZodError) {
+      return new Response(JSON.stringify({ error: "Bad Request", details: err.errors }), {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    // Handle unexpected errors
+    logError("Error in GET /api/user-tasks/:id", err);
+    const message = err instanceof Error ? err.message : "Internal Server Error";
+    return new Response(JSON.stringify({ error: message }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+};
 
 /**
  * PATCH /api/user-tasks/:id
@@ -77,7 +149,10 @@ export const PATCH: APIRoute = async ({ params, request, locals }) => {
       logError("Error fetching user task", fetchResult.error);
       return new Response(JSON.stringify({ error: "Internal Server Error" }), { status: 500 });
     }
-    const existingTask = fetchResult.data!;
+    // Verify task exists before proceeding with update
+    if (!fetchResult.data) {
+      return new Response(JSON.stringify({ error: "Not Found" }), { status: 404 });
+    }
 
     // Step 5: Prepare update payload
     const updatePayload = updateData;
@@ -95,10 +170,13 @@ export const PATCH: APIRoute = async ({ params, request, locals }) => {
       logError("Error updating user task", updateResult.error);
       return new Response(JSON.stringify({ error: "Internal Server Error" }), { status: 500 });
     }
-    const updatedRow = updateResult.data!;
+    // Verify update succeeded
+    if (!updateResult.data) {
+      return new Response(JSON.stringify({ error: "Internal Server Error" }), { status: 500 });
+    }
 
     // Step 7: Return updated task as JSON response
-    return new Response(JSON.stringify(updatedRow), { status: 200 });
+    return new Response(JSON.stringify(updateResult.data), { status: 200 });
   } catch (err: unknown) {
     if (err instanceof ZodError) {
       return new Response(JSON.stringify({ error: err.errors }), { status: 400 });

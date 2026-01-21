@@ -45,6 +45,13 @@ Użytkownicy, którzy zmagają się z depresją, wypaleniem czy chronicznym spad
 ## 5. Historyjki użytkowników
 
 - ID: US-001
+  Tytuł: Strona główna
+  Opis: Strona główna aplikacji na która uzytkownik wchodzi na początku interakcji z aplikacją.
+  Kryteria akceptacji:
+  - Wejście na strone jest możliwe dla każdego użytkownika.
+  - Na stronie pod tytulem jest przycisk przekierowywujący do strony checkin lub do strony z zadaniem (jeśli checkin był w danym dniu wykonany)
+
+- ID: US-002
   Tytuł: Wykonanie codziennego check-inu
   Opis: Użytkownik loguje się do aplikacji, przeprowadza check-in nastroju oraz poziomu energii, po czym otrzymuje spersonalizowane zadanie na dany dzień.
   Kryteria akceptacji:
@@ -53,7 +60,7 @@ Użytkownicy, którzy zmagają się z depresją, wypaleniem czy chronicznym spad
   - System na podstawie wprowadzonych danych generuje odpowiednie zadanie.
   - Zadanie jest wyświetlane na głównym ekranie wraz z komunikatem zachęcającym do wykonania.
 
-- ID: US-002
+- ID: US-003
   Tytuł: Zadanie dla użytkownika o wysokiej energii
   Opis: Gdy użytkownik zgłasza wysoki poziom energii, system przydziela bardziej aktywizujące zadanie, mające na celu zwiększenie poczucia sprawczości.
   Kryteria akceptacji:
@@ -62,7 +69,7 @@ Użytkownicy, którzy zmagają się z depresją, wypaleniem czy chronicznym spad
   - Zadanie jest zaprojektowane tak, aby angażowało użytkownika do wykonania bardziej dynamicznej aktywności.
   - Użytkownik otrzymuje odpowiedni komunikat motywujący do podjęcia zadania.
 
-- ID: US-003
+- ID: US-004
   Tytuł: Postępowanie w przypadku pominięcia zadania
   Opis: Jeśli użytkownik zdecyduje się pominąć przydzielone zadanie, system wyświetla neutralny komunikat, informujący o możliwości wykonania zadania w późniejszym czasie oraz rejestruje taki przypadek.
   Kryteria akceptacji:
@@ -71,7 +78,7 @@ Użytkownicy, którzy zmagają się z depresją, wypaleniem czy chronicznym spad
   - System wyświetla komunikat, który jest neutralny, lecz wspierający.
   - Akcja pominięcia zadania jest zapisywana dla celów analizy retencji użytkowników.
 
-- ID: US-004
+- ID: US-005
   Tytuł: Uwierzytelnianie i bezpieczny dostęp
   Opis: Aplikacja umożliwia użytkownikowi bezpieczne logowanie poprzez rejestrację za pomocą e-mail, gwarantując ochronę danych osobowych.
   Kryteria akceptacji:

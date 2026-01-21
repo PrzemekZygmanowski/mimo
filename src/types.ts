@@ -192,3 +192,52 @@ export interface UpdateTaskStatus {
 export interface RequestNewTask {
   new_task_requests: number;
 }
+
+// -----------------------
+// Home Page View Models
+// -----------------------
+
+// State management for home page
+export interface HomePageState {
+  // Indicates whether data is being loaded
+  isLoading: boolean;
+
+  // Determines if user is authenticated
+  isAuthenticated: boolean;
+
+  // Determines if user has completed today's check-in (has active task for today)
+  hasTodayTask: boolean;
+
+  // Stores error message (null if no error)
+  error: string | null;
+
+  // Optional: stores task data if it exists
+  todayTask?: UserTaskDTO | null;
+}
+
+// Configuration for Call To Action button
+export interface CTAConfig {
+  // Text displayed on the button
+  text: string;
+
+  // URL where user will be redirected
+  href: string;
+
+  // Optional: button style variant
+  variant?: "default" | "secondary" | "outline";
+}
+
+// Props passed to HomePageContent component
+export interface HomePageContentProps {
+  // CTA button configuration
+  ctaConfig: CTAConfig;
+}
+
+// Props for error message component
+export interface ErrorMessageProps {
+  // Error message content to display
+  message: string;
+
+  // Function called when "Try again" is clicked
+  onRetry: () => void;
+}
