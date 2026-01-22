@@ -15,6 +15,7 @@ export const HomePageContent = ({ ctaConfig }: HomePageContentProps) => {
   const handleCTAClick = () => {
     window.location.href = ctaConfig.href;
   };
+  console.log(ctaConfig);
 
   return (
     <main className='flex flex-col items-center justify-center min-h-[60vh] px-4 py-12'>

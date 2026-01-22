@@ -197,7 +197,7 @@ export interface RequestNewTask {
 // Home Page View Models
 // -----------------------
 
-// State management for home page
+// State management for home page (client-side)
 export interface HomePageState {
   // Indicates whether data is being loaded
   isLoading: boolean;
@@ -213,6 +213,21 @@ export interface HomePageState {
 
   // Optional: stores task data if it exists
   todayTask?: UserTaskDTO | null;
+}
+
+// Initial state passed from server-side rendering
+export interface HomePageInitialState {
+  // Determines if user is authenticated (computed server-side)
+  isAuthenticated: boolean;
+
+  // Determines if user has completed today's check-in
+  hasTodayTask: boolean;
+
+  // Stores task data if it exists
+  todayTask: UserTaskDTO | null;
+
+  // Error message from server-side data fetching
+  error: string | null;
 }
 
 // Configuration for Call To Action button

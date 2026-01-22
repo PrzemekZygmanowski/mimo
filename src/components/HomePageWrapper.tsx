@@ -1,13 +1,18 @@
 import { ErrorMessage } from "@/components/ErrorMessage";
 import { HomePageContent } from "@/components/HomePageContent";
-import { LoadingSkeleton } from "@/components/LoadingSkeleton";
-import { useHomePageState } from "@/hooks/useHomePageState";
+import type { CTAConfig, HomePageInitialState } from "@/types";
+import { useMemo } from "react";
+
+interface HomePageWrapperProps {
+  // Initial state passed from server-side rendering
+  initialState: HomePageInitialState;
+}
 
 /**
  * HomePageWrapper Component
  *
  * Main orchestration component for the home page
- * Manages state, executes API calls, and renders appropriate content based on user state
+ * Receives server-side rendered state and determines appropriate CTA
  * This is the top-level React component mounted with client:load directive in index.astro
  *
  * Handles three main scenarios:
@@ -15,17 +20,41 @@ import { useHomePageState } from "@/hooks/useHomePageState";
  * 2. User logged in without today's check-in → Show "Wykonaj Check-in" button → /checkin
  * 3. User logged in with check-in completed → Show "Zobacz Moje Zadanie" button → /task
  */
-export const HomePageWrapper = () => {
-  const { state, ctaConfig, retry } = useHomePageState();
+export const HomePageWrapper = ({ initialState }: HomePageWrapperProps) => {
+  /**
+   * Determines the appropriate CTA configuration based on initial state
+   * Memoized to prevent unnecessary recalculations
+   */
+  const ctaConfig = useMemo((): CTAConfig => {
+    // User not authenticated
+    if (!initialState.isAuthenticated) {
+      return {
+        text: "Zacznij",
+        href: "/login",
+        variant: "default",
+      };
+    }
 
-  // Loading state - show skeleton
-  if (state.isLoading) {
-    return <LoadingSkeleton />;
-  }
+    // User has completed today's check-in
+    if (initialState.hasTodayTask) {
+      return {
+        text: "Zobacz Moje Zadanie",
+        href: "/task",
+        variant: "default",
+      };
+    }
 
-  // Error state - show error message with retry option
-  if (state.error) {
-    return <ErrorMessage message={state.error} onRetry={retry} />;
+    // User needs to complete check-in
+    return {
+      text: "Wykonaj Check-in",
+      href: "/checkin",
+      variant: "default",
+    };
+  }, [initialState.isAuthenticated, initialState.hasTodayTask]);
+
+  // Error state - show error message with page reload option
+  if (initialState.error) {
+    return <ErrorMessage message={initialState.error} onRetry={() => window.location.reload()} />;
   }
 
   // Success state - show home page content with appropriate CTA

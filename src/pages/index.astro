@@ -1,10 +1,20 @@
 ---
 import { HomePageWrapper } from "@/components/HomePageWrapper";
+import type { Database } from "@/db/database.types";
 import Layout from "@/layouts/Layout.astro";
+import { getHomePageInitialState } from "@/lib/services/homePageService";
+import type { SupabaseClient } from "@supabase/supabase-js";
 
 export const prerender = false;
+
+// Server-side data fetching
+const { locals } = Astro;
+const supabase = locals.supabase as SupabaseClient<Database>;
+
+// Fetch initial state using service layer
+const initialState = await getHomePageInitialState(supabase);
 ---
 
 <Layout title='Mimo - Twój codzienny towarzysz'>
-  <HomePageWrapper client:load />
+  <HomePageWrapper client:load initialState={initialState} />
 </Layout>

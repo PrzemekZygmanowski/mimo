@@ -3,6 +3,14 @@ import type { CTAConfig, HomePageState, UserTaskDTO } from "@/types";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 /**
+ * @deprecated This hook is deprecated and should not be used.
+ * Home page now uses Server-Side Rendering (SSR) for authentication state.
+ * See index.astro for server-side data fetching implementation.
+ *
+ * ISSUE: This hook used createSupabaseBrowserClient() which cannot access
+ * httpOnly session cookies, causing getUser() to always return null.
+ * The solution was to move authentication checking to server-side.
+ *
  * Custom hook for managing home page state
  * Handles authentication checking, fetching today's task, and determining appropriate CTA
  *
@@ -48,6 +56,7 @@ export const useHomePageState = () => {
         });
         return;
       }
+      console.log(1, supabase.auth.getUser());
 
       // User is logged in - check for today's task
       const today = new Date().toISOString().split("T")[0];

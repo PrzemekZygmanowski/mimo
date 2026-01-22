@@ -3,12 +3,6 @@ import CheckInPageWrapper from "../components/CheckInPageWrapper";
 import Layout from "../layouts/Layout.astro";
 
 export const prerender = false;
-
-// Ensure user is authenticated (middleware should handle this, but double-check)
-const user = Astro.locals.user;
-if (!user) {
-  return Astro.redirect("/login");
-}
 ---
 
 <Layout title='Check-In - MIMO'>

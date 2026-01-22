@@ -3,6 +3,7 @@ import { createSupabaseServerInstance } from "../db/supabase.client";
 
 // Public paths that don't require authentication
 const PUBLIC_PATHS = [
+  "/", // Home page accessible for both authenticated and unauthenticated users
   "/login",
   "/register",
   "/forgot-password",
@@ -17,14 +18,35 @@ const AUTH_ONLY_PATHS = [
   "/api/auth/logout", // Logout endpoint
 ];
 
+// Protected paths that require authentication but are not redirected when authenticated
+const PROTECTED_PATHS = [
+  "/checkin",
+  "/task",
+  "/api/user-tasks",
+  "/api/plants-progress",
+  "/api/checkins",
+  "/api/task-templates",
+];
+
 // Helper function to check if the current path is public
 const isPublicPath = (pathname: string): boolean => {
-  return PUBLIC_PATHS.some(publicPath => pathname.startsWith(publicPath));
+  return PUBLIC_PATHS.some(publicPath => {
+    // Exact match for root path to avoid matching all paths
+    if (publicPath === "/") {
+      return pathname === "/";
+    }
+    return pathname.startsWith(publicPath);
+  });
 };
 
 // Helper function to check if the current path requires authentication
 const isAuthOnlyPath = (pathname: string): boolean => {
   return AUTH_ONLY_PATHS.some(authPath => pathname.startsWith(authPath));
+};
+
+// Helper function to check if the current path is protected
+const isProtectedPath = (pathname: string): boolean => {
+  return PROTECTED_PATHS.some(protectedPath => pathname.startsWith(protectedPath));
 };
 
 export const onRequest = defineMiddleware(async (context, next) => {
@@ -52,19 +74,26 @@ export const onRequest = defineMiddleware(async (context, next) => {
   // Check path type
   const isPublic = isPublicPath(pathname);
   const isAuthOnly = isAuthOnlyPath(pathname);
+  const isProtected = isProtectedPath(pathname);
 
   // Auth-only paths: require authentication
   if (isAuthOnly && !context.locals.user) {
     return context.redirect("/login");
   }
 
-  // Public paths: redirect authenticated users away from auth pages
-  if (isPublic && context.locals.user) {
+  // Protected paths: require authentication
+  if (isProtected && !context.locals.user) {
+    return context.redirect("/login");
+  }
+
+  // Public paths: redirect authenticated users away from auth pages (except home)
+  // Home page (/) is accessible for both authenticated and unauthenticated users
+  if (isPublic && context.locals.user && pathname !== "/") {
     return context.redirect("/");
   }
 
-  // Protected paths: require authentication
-  if (!isPublic && !isAuthOnly && !context.locals.user) {
+  // All other non-public, non-auth-only, non-protected paths: require authentication
+  if (!isPublic && !isAuthOnly && !isProtected && !context.locals.user) {
     return context.redirect("/login");
   }
 

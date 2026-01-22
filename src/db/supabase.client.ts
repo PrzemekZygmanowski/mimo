@@ -13,18 +13,6 @@ const supabaseAnonKey = import.meta.env.SUPABASE_KEY;
 const publicSupabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL;
 const publicSupabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_KEY;
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error(
-    "Missing Supabase environment variables. Please create a .env file with SUPABASE_URL and SUPABASE_KEY."
-  );
-}
-
-if (!publicSupabaseUrl || !publicSupabaseAnonKey) {
-  throw new Error(
-    "Missing public Supabase environment variables. Please add PUBLIC_SUPABASE_URL and PUBLIC_SUPABASE_KEY to your .env file."
-  );
-}
-
 export const cookieOptions: CookieOptionsWithName = {
   path: "/",
   secure: true,
@@ -40,6 +28,12 @@ function parseCookieHeader(cookieHeader: string): { name: string; value: string 
 }
 
 export const createSupabaseServerInstance = (context: { headers: Headers; cookies: AstroCookies }) => {
+  if (!supabaseUrl || !supabaseAnonKey) {
+    throw new Error(
+      "Missing Supabase environment variables. Please create a .env file with SUPABASE_URL and SUPABASE_KEY."
+    );
+  }
+
   const supabase = createServerClient<Database>(supabaseUrl, supabaseAnonKey, {
     cookieOptions,
     cookies: {
@@ -58,13 +52,39 @@ export const createSupabaseServerInstance = (context: { headers: Headers; cookie
 // Browser client for React components (client-side)
 // Uses PUBLIC_ prefixed environment variables that are accessible on the client
 export const createSupabaseBrowserClient = () => {
+  if (!publicSupabaseUrl || !publicSupabaseAnonKey) {
+    throw new Error(
+      "Missing public Supabase environment variables. Please add PUBLIC_SUPABASE_URL and PUBLIC_SUPABASE_KEY to your .env file."
+    );
+  }
+
   return createClient<Database>(publicSupabaseUrl, publicSupabaseAnonKey);
 };
 
 // DEPRECATED: For backward compatibility with existing API endpoints
 // Use context.locals.supabase in Astro routes instead
 // This will be removed in future refactoring
-export const supabaseClient = createClient<Database>(supabaseUrl, supabaseAnonKey);
+let _supabaseClient: ReturnType<typeof createClient<Database>> | null = null;
+
+export const getSupabaseClient = () => {
+  if (!_supabaseClient) {
+    if (!supabaseUrl || !supabaseAnonKey) {
+      throw new Error(
+        "Missing Supabase environment variables. Please create a .env file with SUPABASE_URL and SUPABASE_KEY."
+      );
+    }
+    _supabaseClient = createClient<Database>(supabaseUrl, supabaseAnonKey);
+  }
+  return _supabaseClient;
+};
+
+// Keep for backward compatibility - lazy getter
+export const supabaseClient = new Proxy({} as ReturnType<typeof createClient<Database>>, {
+  get(_target, prop) {
+    const client = getSupabaseClient();
+    return client[prop as keyof typeof client];
+  },
+});
 
 // Type export for backward compatibility
 export type SupabaseClient = ReturnType<typeof createSupabaseServerInstance>;
