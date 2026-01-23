@@ -26,8 +26,8 @@ const querySchema = z.object({
   status: z
     .string()
     .optional()
-    .refine(val => val === undefined || ["pending", "completed", "skipped"].includes(val), {
-      message: "Status must be one of: pending, completed, skipped",
+    .refine(val => val === undefined || ["pending", "completed", "skipped", "active"].includes(val), {
+      message: "Status must be one of: pending, completed, skipped, active",
     }),
   date: z
     .string()
@@ -53,7 +53,7 @@ const querySchema = z.object({
  * Query Parameters:
  *   - page?: number (default: 1) - Page number for pagination
  *   - limit?: number (default: 10, max: 100) - Number of items per page
- *   - status?: string ('pending' | 'completed' | 'skipped') - Filter by task status
+ *   - status?: string ('pending' | 'completed' | 'skipped' | 'active') - Filter by task status
  *   - date?: string (YYYY-MM-DD) - Filter by task date
  *
  * Responses:

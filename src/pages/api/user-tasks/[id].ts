@@ -17,7 +17,7 @@ const paramsSchema = z.object({
 
 // Schema for validating request body (used in PATCH)
 const bodySchema = z.object({
-  status: z.string().refine(val => ["pending", "completed", "skipped"].includes(val), {
+  status: z.string().refine(val => ["pending", "completed", "skipped", "active"].includes(val), {
     message: "Invalid status value",
   }),
   new_task_requests: z.number().int().min(0).max(3).optional(),
@@ -103,7 +103,7 @@ export const GET: APIRoute = async ({ params, locals }) => {
  *   - id: number (task identifier)
  *
  * Request Body:
- *   - status: string ('pending' | 'completed' | 'skipped')
+ *   - status: string ('pending' | 'completed' | 'skipped' | 'active')
  *   - new_task_requests?: number (0-3)
  *
  * Responses:

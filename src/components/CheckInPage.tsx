@@ -34,7 +34,7 @@ export default function CheckInPage() {
 
       // Success - przekierowanie do strony głównej lub odświeżenie
       await refreshActiveTask();
-      window.location.href = "/";
+      window.location.href = "/task";
     } catch (err) {
       const message = err instanceof Error ? err.message : "Wystąpił nieznany błąd";
       setSubmitError(message);
