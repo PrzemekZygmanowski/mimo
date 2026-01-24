@@ -45,7 +45,7 @@ export default function TaskPage() {
             <p className='text-sm text-muted-foreground'>
               Wykonaj check-in, aby otrzymać spersonalizowane zadanie dopasowane do Twojego nastroju i energii.
             </p>
-            <div className='flex gap-2'>
+            <div className='flex flex-col sm:flex-row gap-2'>
               <Button onClick={() => (window.location.href = "/checkin")}>Wykonaj Check-In</Button>
               <Button onClick={() => (window.location.href = "/")} variant='outline'>
                 Wróć do strony głównej
@@ -70,7 +70,7 @@ export default function TaskPage() {
               </p>
             </div>
             <p className='text-sm text-muted-foreground'>Wykonaj nowy check-in, aby otrzymać kolejne zadanie.</p>
-            <div className='flex gap-2'>
+            <div className='flex flex-col sm:flex-row gap-2'>
               <Button onClick={() => (window.location.href = "/checkin")}>Wykonaj Check-In</Button>
               <Button onClick={() => (window.location.href = "/")} variant='outline'>
                 Wróć do strony głównej
@@ -111,7 +111,7 @@ export default function TaskPage() {
               <p className='text-sm text-muted-foreground'>{task.description}</p>
             </div>
             <p className='text-sm text-muted-foreground'>Wykonaj nowy check-in, aby otrzymać inne zadanie.</p>
-            <div className='flex gap-2'>
+            <div className='flex flex-col sm:flex-row gap-2'>
               <Button onClick={() => (window.location.href = "/checkin")}>Wykonaj Check-In</Button>
               <Button onClick={() => (window.location.href = "/")} variant='outline'>
                 Wróć do strony głównej
